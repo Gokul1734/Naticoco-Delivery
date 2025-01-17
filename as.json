@@ -1,0 +1,60 @@
+[
+ {
+  "BestSeller": true,
+  "__v": 0,
+  "_id": "67777d3dd0a9fadb96a69e41",
+  "availability": true,
+  "category": "chicken",
+  "description": "Liver chicken Fresh ",
+  "image": "http://192.168.0.104:3500/ImageStore//ImageStore/1735884093905-Chicken liver.jpg",
+  "itemName": "Chicken Liver",
+  "newArrival": true,
+  "price": 200,
+  "storeId": "676a9c0eb01d91572de6062d",
+  "subCategory": "teetar"
+ },
+ {
+  "BestSeller": true,
+  "__v": 0,
+  "_id": "67777d7ad0a9fadb96a69e43",
+  "availability": true,
+  "category": "chicken",
+  "description": "Natichicken Fresh ",
+  "image": "http://192.168.0.104:3500/ImageStore//ImageStore/1735884154393-Chicken whole leg without skin.png",
+  "itemName": "ChickenNati",
+  "newArrival": true,
+  "price": 200,
+  "storeId": "676a9c0eb01d91572de6062d",
+  "subCategory": "Natichicken"
+ },
+ {
+  "BestSeller": true,
+  "__v": 0,
+  "_id": "67777dd5d0a9fadb96a69e45",
+  "availability": true,
+  "category": "chicken",
+  "descility": true,
+  "category": "chicken",
+  "description": "chicken TandooriFresh ",
+  "image": "http://192.168.0.104:3500/ImageStore//ImageStore/1735884245879-Tandoori Chicken Tikka.jpg",
+  "itemName": "chicken Tandoori",
+  "newArrival": true,
+  "price": 200,
+  "storeId": "676a9c0eb01d91572de6062d",
+  "subCategory": "marinated"
+ },
+ {
+  "BestSeller": true,
+  "__v": 0,
+  "_id": "67777e0fd0a9fadb96a69e47",
+  "availability": true,
+  "category": "chicken",
+  "description": "chicken Meatball Fresh ",
+  "image": "http://192.168.0.104:3500/ImageStore//ImageStore/1735884303613-chicken Meatballs.jpg",
+  "itemName": "chicken Meatball",
+  "newArrival": true,
+  "price": 200,
+  "storeId": "676a9c0eb01d91572de6062d",
+  "subCategory": "heatandeat"
+ }
+]

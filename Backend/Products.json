@@ -1,0 +1,95 @@
+[
+  {
+    "id": "1",
+    "name": "Nati Chicken",
+    "description": "Fresh tomatoes, mozzarella, basil, and olive oil",
+    "price": 180,
+    "image": "natiChicken.jpg",
+    "category": "Naticoco",
+    "quantity": "500 gms (2 pcs)",
+    "bestSeller": true,
+    "newArrival": true,
+    "chickenType": "Nati"
+  },
+  {
+    "id": "2",
+    "name": "Chicken Kebab",
+    "description": "Beef patty with lettuce, tomato, cheese, and special sauce",
+    "price": 240,
+    "image": "ChickenKebab.jpg",
+    "category": "Marinated",
+    "quantity": "500 gms (2 pcs)",
+    "newArrival": true,
+    "bestSeller": false
+  },
+  {
+    "id": "3",
+    "name": "Tandoori Chicken Tikka",
+    "description": "Romaine lettuce, croutons, parmesan cheese with Caesar dressing",
+    "price": 250,
+    "image": "tandoori.jpg",
+    "category": "Marinated",
+    "quantity": "300 gms (3-4 pcs)",
+    "bestSeller": true,
+    "newArrival": true
+  },
+  {
+    "id": "4",
+    "name": "Chicken Curry Cut (Without Bones)",
+    "description": "Fresh boneless chicken curry cut pieces",
+    "price": 150,
+    "image": "wob.jpg",
+    "category": "Chicken",
+    "quantity": "1kg (10 pcs)",
+    "bestSeller": false,
+    "newArrival": true,
+    "chickenType": "Broiler"
+  },
+  {
+    "id": "5",
+    "name": "Chicken Curry Cut (Without Legs)",
+    "description": "Fresh chicken curry cut without legs",
+    "price": 200,
+    "image": "thighs.jpg",
+    "category": "Chicken",
+    "quantity": "1kg (10 pcs)",
+    "bestSeller": true,
+    "newArrival": false,
+    "chickenType": "Country"
+  },
+  {
+    "id": "6",
+    "name": "Ginger Garlic Paste",
+    "description": "Romaine lettuce, croutons, parmesan cheese with Caesar dressing",
+    "price": 120,
+    "image": "ggp.jpg",
+    "category": "Spices",
+    "quantity": "500ml Bottle",
+    "bestSeller": true,
+    "newArrival": false
+  },
+  {
+    "id": "7",
+    "name": "Farm Fresh Eggs",
+    "description": "Fresh farm eggs, perfect for daily use",
+    "price": 80,
+    "image": "farm_eggs.jpg",
+    "category": "Eggs",
+    "quantity": "Pack of 12",
+    "bestSeller": true,
+    "newArrival": false,
+    "eggType": "Farm"
+  },
+  {
+    "id": "8",
+    "name": "Nati Eggs",
+    "description": "Traditional country eggs",
+    "price": 120,
+    "image": "nati_eggs.jpg",
+    "category": "Eggs",
+    "quantity": "Pack of 6",
+    "bestSeller": true,
+    "newArrival": true,
+    "eggType": "Nati"
+  }
+]

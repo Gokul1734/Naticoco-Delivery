@@ -1,0 +1,39 @@
+{
+  "expo": {
+    "name": "Naticoco_new",
+    "slug": "Naticoco_new",
+    "runtimeVersion": "1.0.0",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./Assets/images/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.yourcompany.myexpoapp",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "9e10ae07-d951-417a-a5ed-4aef8a4b89a4"
+      }
+    },
+    "owner": "gokul1734",
+    "updates": {
+      "url": "https://u.expo.dev/9e10ae07-d951-417a-a5ed-4aef8a4b89a4"
+    }
+  }
+}

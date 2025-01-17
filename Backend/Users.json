@@ -1,0 +1,333 @@
+[
+ {
+  "userId": "390812409",
+  "name": "Gokulpriyan Karthikeyan", 
+  "email": "kgokulpriyan@gmail.com",
+  "password": "gokul2004",
+  "mobileno": 7010871355,
+  "memberSince": "15/04/2024",
+  "resetPwdToken": null,
+  "resetPwdExpire": null,
+  "address": [
+   {
+     "id": 1,
+     "type": "Custom",
+     "tag": "Home", 
+     "address": "123 Main Street",
+     "area": "Anna Nagar",
+     "city": "Chennai",
+     "pincode": 600001,
+     "isDefault": true
+   }
+  ],
+  "orders": {
+   "orderId": {
+    "status": false,
+    "products": {
+      "5": 1,
+      "6": 2, 
+      "2": 3
+    },
+    "totalprice": 450,
+    "date": "12/3/24"
+   }
+  }
+ },
+ {
+  "userId": "390812410",
+  "name": "Priya Sharma",
+  "email": "priya.s@gmail.com", 
+  "password": "priya123",
+  "mobileno": 9876543210,
+  "memberSince": "10/04/2024",
+  "resetPwdToken": null,
+  "resetPwdExpire": null,
+  "address": [
+   {
+     "id": 1,
+     "type": "Custom",
+     "tag": "Home",
+     "address": "45 Park Road",
+     "area": "T Nagar",
+     "city": "Chennai",
+     "pincode": 600017,
+     "isDefault": true
+   }
+  ],
+  "orders": {
+   "orderId": {
+    "status": true,
+    "products": {
+      "1": 2,
+      "3": 1
+    },
+    "totalprice": 350,
+    "date": "11/3/24"
+   }
+  }
+ },
+ {
+  "userId": "390812411",
+  "name": "Rahul Kumar",
+  "email": "rahul.k@gmail.com",
+  "password": "rahul2024",
+  "mobileno": 8765432109,
+  "memberSince": "01/04/2024",
+  "resetPwdToken": null,
+  "resetPwdExpire": null,
+  "address": [
+   {
+     "id": 1,
+     "type": "Custom",
+     "tag": "Office",
+     "address": "78 Tech Park",
+     "area": "Guindy",
+     "city": "Chennai",
+     "pincode": 600032,
+     "isDefault": true
+   }
+  ],
+  "orders": {
+   "orderId": {
+    "status": false,
+    "products": {
+      "4": 3,
+      "2": 1
+    },
+    "totalprice": 550,
+    "date": "13/3/24"
+   }
+  }
+ },
+ {
+  "userId": "390812412",
+  "name": "Anjali Desai",
+  "email": "anjali.d@gmail.com",
+  "password": "anjali456",
+  "mobileno": 7654321098,
+  "memberSince": "20/03/2024",
+  "resetPwdToken": null,
+  "resetPwdExpire": null,
+  "address": [
+   {
+     "id": 1,
+     "type": "Custom",
+     "tag": "Home",
+     "address": "90 Lake View",
+     "area": "Adyar",
+     "city": "Chennai",
+     "pincode": 600020,
+     "isDefault": true
+   }
+  ],
+  "orders": {
+   "orderId": {
+    "status": true,
+    "products": {
+      "1": 1,
+      "6": 2
+    },
+    "totalprice": 400,
+    "date": "14/3/24"
+   }
+  }
+ },
+ {
+  "userId": "390812413",
+  "name": "Mohammed Ali",
+  "email": "mali@gmail.com",
+  "password": "mali789",
+  "mobileno": 6543210987,
+  "memberSince": "05/04/2024",
+  "resetPwdToken": null,
+  "resetPwdExpire": null,
+  "address": [
+   {
+     "id": 1,
+     "type": "Custom",
+     "tag": "Home",
+     "address": "12 Beach Road",
+     "area": "Besant Nagar",
+     "city": "Chennai",
+     "pincode": 600090,
+     "isDefault": true
+   }
+  ],
+  "orders": {
+   "orderId": {
+    "status": false,
+    "products": {
+      "3": 2,
+      "4": 1
+    },
+    "totalprice": 500,
+    "date": "15/3/24"
+   }
+  }
+ },
+ {
+  "userId": "390812414",
+  "name": "Sneha Reddy",
+  "email": "sneha.r@gmail.com",
+  "password": "sneha321",
+  "mobileno": 9876543211,
+  "memberSince": "25/03/2024",
+  "resetPwdToken": null,
+  "resetPwdExpire": null,
+  "address": [
+   {
+     "id": 1,
+     "type": "Custom",
+     "tag": "Office",
+     "address": "34 IT Park",
+     "area": "Sholinganallur",
+     "city": "Chennai",
+     "pincode": 600119,
+     "isDefault": true
+   }
+  ],
+  "orders": {
+   "orderId": {
+    "status": true,
+    "products": {
+      "2": 2,
+      "5": 1
+    },
+    "totalprice": 600,
+    "date": "16/3/24"
+   }
+  }
+ },
+ {
+  "userId": "390812415",
+  "name": "Karthik Raj",
+  "email": "karthik.r@gmail.com",
+  "password": "karthik567",
+  "mobileno": 8765432108,
+  "memberSince": "12/04/2024",
+  "resetPwdToken": null,
+  "resetPwdExpire": null,
+  "address": [
+   {
+     "id": 1,
+     "type": "Custom",
+     "tag": "Home",
+     "address": "56 Temple Street",
+     "area": "Mylapore",
+     "city": "Chennai",
+     "pincode": 600004,
+     "isDefault": true
+   }
+  ],
+  "orders": {
+   "orderId": {
+    "status": false,
+    "products": {
+      "1": 3,
+      "4": 1
+    },
+    "totalprice": 750,
+    "date": "17/3/24"
+   }
+  }
+ },
+ {
+  "userId": "390812416",
+  "name": "Divya Prakash",
+  "email": "divya.p@gmail.com",
+  "password": "divya890",
+  "mobileno": 7654321097,
+  "memberSince": "08/04/2024",
+  "resetPwdToken": null,
+  "resetPwdExpire": null,
+  "address": [
+   {
+     "id": 1,
+     "type": "Custom",
+     "tag": "Home",
+     "address": "89 Green Park",
+     "area": "Velachery",
+     "city": "Chennai",
+     "pincode": 600042,
+     "isDefault": true
+   }
+  ],
+  "orders": {
+   "orderId": {
+    "status": true,
+    "products": {
+      "6": 1,
+      "3": 2
+    },
+    "totalprice": 480,
+    "date": "18/3/24"
+   }
+  }
+ },
+ {
+  "userId": "390812417",
+  "name": "Arun Kumar",
+  "email": "arun.k@gmail.com",
+  "password": "arun234",
+  "mobileno": 6543210986,
+  "memberSince": "30/03/2024",
+  "resetPwdToken": null,
+  "resetPwdExpire": null,
+  "address": [
+   {
+     "id": 1,
+     "type": "Custom",
+     "tag": "Office",
+     "address": "23 Business Park",
+     "area": "OMR",
+     "city": "Chennai",
+     "pincode": 600096,
+     "isDefault": true
+   }
+  ],
+  "orders": {
+   "orderId": {
+    "status": false,
+    "products": {
+      "5": 2,
+      "2": 1
+    },
+    "totalprice": 520,
+    "date": "19/3/24"
+   }
+  }
+ },
+ {
+  "userId": "390812418",
+  "name": "Meera Iyer",
+  "email": "meera.i@gmail.com",
+  "password": "meera678",
+  "mobileno": 9876543212,
+  "memberSince": "18/03/2024",
+  "resetPwdToken": null,
+  "resetPwdExpire": null,
+  "address": [
+   {
+     "id": 1,
+     "type": "Custom",
+     "tag": "Home",
+     "address": "67 College Road",
+     "area": "Tambaram",
+     "city": "Chennai",
+     "pincode": 600045,
+     "isDefault": true
+   }
+  ],
+  "orders": {
+   "orderId": {
+    "status": true,
+    "products": {
+      "4": 2,
+      "1": 1
+    },
+    "totalprice": 620,
+    "date": "20/3/24"
+   }
+  }
+ }
+]

@@ -1,0 +1,46 @@
+[
+  {
+    "id": "7",
+    "name": "Classic Fried Chicken",
+    "price": 199,
+    "image": "cp3.jpg",
+    "description": "Crispy on the outside, juicy on the inside",
+    "category": "Fried",
+    "quantity": "500 gms (2 pcs)",
+    "bestSeller": true,
+    "newArrival": true
+  },
+  {
+    "id": "8",
+    "name": "Spicy Wings",
+    "price": 249,
+    "image": "cp2.jpg",
+    "description": "Hot and spicy chicken wings",
+    "category": "Wings",
+    "quantity": "400 gms (6 pcs)",
+    "bestSeller": false,
+    "newArrival": true
+  },
+  {
+    "id": "9",
+    "name": "Chicken Popcorn",
+    "price": 179,
+    "image": "cp.jpg",
+    "description": "Bite-sized crispy chicken pieces",
+    "category": "Snacks",
+    "quantity": "250 gms",
+    "bestSeller": true,
+    "newArrival": false
+  },
+  {
+    "id": "10",
+    "name": "Caesar Salad",
+    "price": 149,
+    "image": "salad.jpg",
+    "description": "Fresh salad with grilled chicken",
+    "category": "Salads",
+    "quantity": "300 gms",
+    "bestSeller": false,
+    "newArrival": false
+  }
+] 
