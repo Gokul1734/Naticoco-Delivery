@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity, Image, Dimensions } from 'react-native';
-import { Text, Card } from 'react-native-paper';
+import { Text, Card, Switch } from 'react-native-paper';
 import { MotiView } from 'moti';
-import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import DScreenBackground from './Components/DScreenBackground';
 import DeliveryLoadingScreen from './Components/DeliveryLoadingScreen';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
-const DeliveryCard = ({ title, price, onPress }) => (
+const DeliveryCard = ({ orderId, amount, status, onPress }) => (
   <MotiView
     from={{ opacity: 0, translateY: 50 }}
     animate={{ opacity: 1, translateY: 0 }}
@@ -22,36 +23,104 @@ const DeliveryCard = ({ title, price, onPress }) => (
             source={require('../../assets/images/package.png')} 
             style={styles.packageIcon}
           />
-          <Text style={styles.deliveryTitle}>{title}</Text>
-          <Text style={styles.deliveryPrice}>Rs {price}/-</Text>
+          <Text style={styles.deliveryTitle}>Order #{orderId}</Text>
+          <Text style={styles.deliveryPrice}>Rs {amount}/-</Text>
+          <Text style={[styles.statusText, { color: getStatusColor(status) }]}>
+            {status}
+          </Text>
         </Card.Content>
       </Card>
     </TouchableOpacity>
   </MotiView>
 );
 
+const getStatusColor = (status) => {
+  switch (status) {
+    case 'PENDING': return '#FFA500';
+    case 'PREPARING': return '#4169E1';
+    case 'READY': return '#32CD32';
+    case 'COMPLETED': return '#008000';
+    case 'REJECTED': return '#FF0000';
+    default: return '#000000';
+  }
+};
+
 export default function DeliveryHome() {
   const navigation = useNavigation();
-  const [userName, setUserName] = useState('Syam');
   const [isLoading, setIsLoading] = useState(true);
+  const [userDetails, setUserDetails] = useState(null);
+  const [isAvailable, setIsAvailable] = useState(false);
+  const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    // Simulate loading time
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
+    loadUserDetails();
   }, []);
+
+  useEffect(() => {
+    if (userDetails?._id) {
+      fetchOrders();
+    }
+  }, [userDetails]);
+
+  const loadUserDetails = async () => {
+    try {
+      const details = await AsyncStorage.getItem('riderDetails');
+      if (details) {
+        const parsedDetails = JSON.parse(details);
+        setUserDetails(parsedDetails);
+        setIsAvailable(parsedDetails.availability);
+      }
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Error loading user details:', error);
+      setIsLoading(false);
+    }
+  };
+
+  const fetchOrders = async () => {
+    try {
+      const response = await axios.get(`http://192.168.29.242:3500/Adminstore/delivery/orders/${userDetails._id}`);
+      if (response.data) {
+        setOrders(response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+    }
+  };
+
+  const toggleAvailability = async () => {
+    try {
+      const newAvailability = !isAvailable;
+      const response = await axios.patch(`http://192.168.29.242:3500/Adminstore/delivery/availability/${userDetails._id}`, {
+        availability: newAvailability
+      });
+      
+      if (response.status === 200) {
+        setIsAvailable(newAvailability);
+        const updatedDetails = { ...userDetails, availability: newAvailability };
+        await AsyncStorage.setItem('riderDetails', JSON.stringify(updatedDetails));
+        setUserDetails(updatedDetails);
+      }
+    } catch (error) {
+      console.error('Error updating availability:', error);
+    }
+  };
 
   if (isLoading) {
     return <DeliveryLoadingScreen />;
   }
 
+  const handleOrderPress = (orderId) => {
+    navigation.navigate('OrderDetails', { orderId });
+  };
+
   return (
     <DScreenBackground>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+        {/* Header Section */}
         <View style={styles.header}>
           <View style={styles.headerLeft}>
-            <Text style={styles.greeting}>Hi {userName}.</Text>
+            <Text style={styles.greeting}>Hi {userDetails?.name || 'Rider'}.</Text>
             <TouchableOpacity style={styles.notificationButton}>
               <Image 
                 source={require('../../assets/images/notification.gif')}
@@ -59,46 +128,76 @@ export default function DeliveryHome() {
               />
             </TouchableOpacity>
           </View>
-          <TouchableOpacity 
-            style={styles.profileButton}
-            onPress={() => navigation.navigate('Profile')}
-          >
-            <Image 
-              source={require('../../assets/images/profile.gif')}
-              style={styles.profileGif}
-            />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.todaySection}>
-          <Text style={styles.sectionTitle}>Today's Delivery</Text>
-          <View style={styles.imageContainer}>
-            <Image 
-              source={require('../../assets/images/delivery1.png')}
-              style={[{width: SCREEN_WIDTH * 0.43,height: 150,},styles.deliveryImage]}
-              resizeMode='contain'
-            />
-            <Image 
-              source={require('../../assets/images/delivery2.png')}
-              style={[{height: 111,width:SCREEN_WIDTH * 0.43,marginTop:22},styles.deliveryImage]}
-              resizeMode="cover"
-            />
+          <View style={styles.headerRight}>
+            <View style={styles.availabilityContainer}>
+              <Text style={styles.availabilityText}>
+                {isAvailable ? 'Available' : 'Unavailable'}
+              </Text>
+              <Switch
+                value={isAvailable}
+                onValueChange={toggleAvailability}
+                color="#F8931F"
+              />
+            </View>
+            <TouchableOpacity 
+              style={styles.profileButton}
+              onPress={() => navigation.navigate('Profile')}
+            >
+              <Image 
+                source={require('../../assets/images/profile.gif')}
+                style={styles.profileGif}
+              />
+            </TouchableOpacity>
           </View>
         </View>
 
+        {/* Active Orders Section */}
         <View style={styles.deliveryDetailsSection}>
-          <Text style={styles.sectionTitle}>Get Delivery Details</Text>
+          <Text style={styles.sectionTitle}>Active Orders</Text>
           <ScrollView 
             horizontal 
             showsHorizontalScrollIndicator={false}
             style={styles.cardsContainer}
           >
-            <DeliveryCard title="Delivery" price="149" onPress={() => {}} />
-            <DeliveryCard title="Delivery" price="149" onPress={() => {}} />
-            <DeliveryCard title="Delivery" price="149" onPress={() => {}} />
+            {orders
+              .filter(order => ['PENDING', 'PREPARING', 'READY'].includes(order.status))
+              .map(order => (
+                <DeliveryCard
+                  key={order._id}
+                  orderId={order.orderId}
+                  amount={order.amount}
+                  status={order.status}
+                  onPress={() => handleOrderPress(order._id)}
+                />
+              ))
+            }
           </ScrollView>
         </View>
 
+        {/* Completed Orders Section */}
+        <View style={styles.deliveryDetailsSection}>
+          <Text style={styles.sectionTitle}>Completed Orders</Text>
+          <ScrollView 
+            horizontal 
+            showsHorizontalScrollIndicator={false}
+            style={styles.cardsContainer}
+          >
+            {orders
+              .filter(order => order.status === 'COMPLETED')
+              .map(order => (
+                <DeliveryCard
+                  key={order._id}
+                  orderId={order.orderId}
+                  amount={order.amount}
+                  status={order.status}
+                  onPress={() => handleOrderPress(order._id)}
+                />
+              ))
+            }
+          </ScrollView>
+        </View>
+
+        {/* Updates Section */}
         <View style={styles.updatesSection}>
           <Text style={styles.sectionTitle}>Latest Updates</Text>
           <Card style={styles.updatesCard}>
@@ -106,15 +205,33 @@ export default function DeliveryHome() {
               source={require('../../assets/images/updates.png')}
               style={styles.updatesImage}
               resizeMode="cover"
-              />
+            />
           </Card>
         </View>
       </ScrollView>
     </DScreenBackground>
   );
 }
-
 const styles = StyleSheet.create({
+  statusText: {
+    fontSize: 12,
+    fontWeight: '500',
+    marginTop: 5,
+    textTransform: 'uppercase'
+  },
+  orderAmount: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#F8931F',
+    marginTop: 5
+  },
+  orderCard: {
+    width: 160,
+    marginRight: 15,
+    borderRadius: 15,
+    backgroundColor: '#fff',
+    elevation: 3
+  },
   container: {
     flex: 1,
     padding: 20,
@@ -130,10 +247,36 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 15,
   },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 15,
+  },
   greeting: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#F8931F',
+  },
+  availabilityContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    padding: 8,
+    borderRadius: 20,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+  },
+  availabilityText: {
+    marginRight: 8,
+    fontSize: 14,
+    color: '#333',
+    fontWeight: '500',
   },
   todaySection: {
     marginBottom: 30,
@@ -150,8 +293,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   deliveryImage: {
-    // width: SCREEN_WIDTH * 0.43,
-    // height: 150,
     borderRadius: 15,
   },
   deliveryDetailsSection: {
@@ -187,10 +328,10 @@ const styles = StyleSheet.create({
   },
   updatesCard: {
     borderRadius: 17,
-    padding:0,
+    padding: 0,
   },
   updatesImage: {
-   margin : 0,
+    margin: 0,
     width: '100%',
     height: 150,
     borderRadius: 15,
@@ -198,9 +339,9 @@ const styles = StyleSheet.create({
   notificationButton: {
     width: 40,
     height: 40,
-    padding:1,
-    paddingRight:4,
-    paddingBottom : 7,
+    padding: 1,
+    paddingRight: 4,
+    paddingBottom: 7,
     borderRadius: 35,
     backgroundColor: '#fff',
     elevation: 2,
@@ -240,4 +381,4 @@ const styles = StyleSheet.create({
     height: '100%',
     resizeMode: 'cover',
   },
-}); 
+});

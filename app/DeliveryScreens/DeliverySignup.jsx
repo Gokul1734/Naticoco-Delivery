@@ -24,7 +24,7 @@ const SignUpScreen = () => {
     }
 
     try {
-      const response = await axios.post('http://192.168.0.105:3500/Adminstore/delivery/Register', {
+      const response = await axios.post('http://192.168.29.242:3500/Adminstore/delivery/Register', {
         name,
         email,
         password,
