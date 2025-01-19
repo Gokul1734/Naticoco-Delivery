@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marinated</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+         .card1 {
+          min-width: 100%;
+          box-sizing: border-box;
+          background: lightgray; /* Card background color */
+          padding: 20px; /* Card padding */
+          margin: 10px; /* Card margin */
+        }
+
+        .bestsellers-scroll {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .card, .New_arrive {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 10px;
+            box-sizing: border-box;
+            width: 250px; /* Fixed width for consistency */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: box-shadow 0.3s;
+        }
+
+        .card:hover, .New_arrive:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .card img, .New_arrive img {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+            object-fit: cover;
+        }
+
+        .card h3, .New_arrive h4 {
+            margin: 10px 0;
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        .card p, .New_arrive p {
+            margin: 5px 0;
+            color: #666;
+        }
+       
+        .ExtraSelection{
+         background-color: #e79845;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="index.html">
+                <img src="logo.jpg" alt="Naticoco Logo">
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="signIn.html">SignIn</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <div id="Mutton" class="tab-content">
+        <h2>Mutton</h2>
+        <div class="category-items-grid">
+            <div class="card">
+                <img src="MuttonCurryCut.jpg" alt="Mutton Curry Cut">
+                <h4>Mutton Curry Cut</h4>
+                <div class="small_box">
+                    <div class="small_box_content1">
+                        <p>500g | Tender</p>
+                        <h4>₹499</h4>
+                    </div>
+                    <div class="small_box_content2">
+                        <h4>ADD</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="LambChops.jpg" alt="Lamb Chops">
+                <h4>Lamb Chops</h4>
+                <div class="small_box">
+                    <div class="small_box_content1">
+                        <p>400g | Premium</p>
+                        <h4>₹599</h4>
+                    </div>
+                    <div class="small_box_content2">
+                        <h4>ADD</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

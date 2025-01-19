@@ -39,6 +39,7 @@ import DeliveryHome from "./DeliveryScreens/DeliveryHome";
 import ActiveDeliveries from "./DeliveryScreens/ActiveDeliveries";
 import { Dimensions } from "react-native";
 import LoginScreen from "./DeliveryScreens/DeliveryLogin";
+import SignUp from "./DeliveryScreens/DeliverySignup";
 // import LoadingScreen from "./CustomerScreens/Components/LoadingScreen";
 // import ScreenBackground from "./CustomerScreens/Components/ScreenBackground";
 
@@ -84,6 +85,12 @@ export default function StackNavigator() {
           component={DeliveryTab}
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+          name="SignUp"
+          component={SignUp}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
+      
   );
 }

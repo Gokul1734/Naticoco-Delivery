@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Horizontal Scroll Cards</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .card-container {
+            display: flex;
+            overflow-x: scroll; /* Allow horizontal scrolling */
+            padding: 20px;
+            scroll-snap-type: x mandatory; /* Enables snap scrolling */
+            scrollbar-width: none; /* For Firefox */
+            -ms-overflow-style: none; /* For Internet Explorer and Edge */
+        }
+
+        .card-container::-webkit-scrollbar {
+            display: none; /* For Chrome, Safari, and Opera */
+        }
+
+        .card {
+            min-width: 300px; /* Set a minimum width for the cards */
+            height: 300px; /* Set a height for the cards */
+            background-color: #4CAF50; /* Card background color */
+            color: white; /* Text color */
+            margin-right: 20px; /* Space between cards */
+            border-radius: 10px; /* Rounded corners */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            scroll-snap-align: start; /* Aligns the card to the start of the container */
+        }
+    </style>
+</head>
+<body>
+    <div class="card-container">
+        <div class="card">Card 1</div>
+        <div class="card">Card 2</div>
+        <div class="card">Card 3</div>
+        <div class="card">Card 4</div>
+        <div class="card">Card 5</div>
+        <div class="card">Card 6</div>
+        <div class="card">Card 7</div>
+    </div>
+</body>
+</html>

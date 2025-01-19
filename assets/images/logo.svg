@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 200">
+  <defs>
+    <style>
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      .letter {
+        animation: fadeIn 1.5s ease-in forwards;
+        opacity: 0;
+      }
+      .letter:nth-child(1) { animation-delay: 0.1s; }
+      .letter:nth-child(2) { animation-delay: 0.2s; }
+      .letter:nth-child(3) { animation-delay: 0.3s; }
+      .letter:nth-child(4) { animation-delay: 0.4s; }
+      .letter:nth-child(5) { animation-delay: 0.5s; }
+      .letter:nth-child(6) { animation-delay: 0.6s; }
+      .letter:nth-child(7) { animation-delay: 0.7s; }
+      .letter:nth-child(8) { animation-delay: 0.8s; }
+    </style>
+  </defs>
+
+  <!-- NATICOCO Letters -->
+  <g transform="translate(50, 100)">
+    <text class="letter" x="0" y="0" fill="#4CAF50" font-size="60" font-family="Arial Black">N</text>
+    <text class="letter" x="60" y="0" fill="#4CAF50" font-size="60" font-family="Arial Black">A</text>
+    <text class="letter" x="120" y="0" fill="#4CAF50" font-size="60" font-family="Arial Black">T</text>
+    <text class="letter" x="180" y="0" fill="#4CAF50" font-size="60" font-family="Arial Black">I</text>
+    <text class="letter" x="240" y="0" fill="#FF6B00" font-size="60" font-family="Arial Black">C</text>
+    <text class="letter" x="300" y="0" fill="#FF6B00" font-size="60" font-family="Arial Black">O</text>
+    <text class="letter" x="360" y="0" fill="#FF6B00" font-size="60" font-family="Arial Black">C</text>
+    <text class="letter" x="420" y="0" fill="#FF6B00" font-size="60" font-family="Arial Black">O</text>
+  </g>
+</svg>

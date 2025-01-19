@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naticoco - Fresh and Quality Products</title>
+    <link rel="stylesheet" href="styles.css">
+
+
+    <link
+  rel="stylesheet"
+  href="https://unpkg.com/swiper/swiper-bundle.min.css"
+/>
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+    <style>
+        /* Footer Styles */
+        .footer {
+            background-color: #222;
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .footer-section {
+            flex: 1 1 200px;
+            margin: 10px;
+            min-width: 150px;
+        }
+
+        .footer-section h3 {
+            color: #ffca28;
+            margin-bottom: 10px;
+        }
+
+        .footer-section ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-section ul li {
+            margin: 5px 0;
+        }
+
+        .footer-section ul li a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section ul li a:hover {
+            color: #ffca28;
+        }
+
+        .footer-logo img {
+            max-width: 120px;
+            margin-bottom: 10px;
+        }
+
+        .footer .app-links {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .app-links img {
+            width: 80px;
+        }
+
+        .image {
+            border-radius: 2%;
+            height: 80px;
+            width: 80px;
+        }
+
+        /* Responsive Footer */
+        @media (max-width: 768px) {
+            .footer {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .footer-section {
+                flex: 1 1 100%;
+                text-align: center;
+            }
+
+            .app-links {
+                justify-content: center;
+                margin: 10px 0;
+            }
+
+            .footer-logo img {
+                max-width: 100px;
+            }
+            
+        }
+
+        /* Edit by nag for testing code */
+        .slider {
+          overflow: hidden;
+          width: 100%;
+          margin: 0 auto;
+        }
+        
+        .slider-container {
+          display: flex;
+          transition: transform 0.5s ease;
+        }
+        
+        .card1 {
+          min-width: 100%;
+          box-sizing: border-box;
+          background: lightgray; /* Card background color */
+          padding: 20px; /* Card padding */
+          margin: 10px; /* Card margin */
+        }
+
+        .bestsellers-scroll {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .card, .New_arrive {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 10px;
+            box-sizing: border-box;
+            width: 250px; /* Fixed width for consistency */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: box-shadow 0.3s;
+        }
+
+        .card:hover, .New_arrive:hover {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .card img, .New_arrive img {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+            object-fit: cover;
+        }
+
+        .card img {
+             width: 200px; 
+             height: 150px; 
+             object-fit: cover;
+             border-radius: 4px;
+        }
+        .card h3, .New_arrive h4 {
+            margin: 10px 0;
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        .card p, .New_arrive p {
+            margin: 5px 0;
+            color: #666;
+        }
+       
+        .ExtraSelection{
+         background-color: #e79845;
+        }
+
+        .card{
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 
+        0 1px 3px rgba(232, 142, 6, 0.08);
+        }
+
+
+        
+    </style>
+</head>
+
+<body>
+    <!-- Header with Navigation Bar -->
+
+    <header>
+        <nav class="navbar">
+            <!-- Brand Logo -->
+            <a href="#" class="navbar-brand"><img src="logo.jpg" alt="Logo" style="height: 50px;"></a>
+
+            <!-- Hamburger Menu -->
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <ul class="navbar-menu">
+                <li><a href="/">Home</a></li>
+                <li><a href="#about">Sign-up</a></li>
+                <li><a href="#services">Menu</a></li>
+                <li><a href="#contact">Cart</a></li>
+            </ul>
+
+            <!-- Mobile Menu -->
+            <ul class="navbar-menu-mobile" id="mobileMenu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="signIn.html">Sign-up</a></li>
+                <li><a href="#services">Menu</a></li>
+                <li><a href="#contact">Cart</a></li>
+            </ul>
+        </nav>
+    </header>
+
+     <div id="sliding">
+        <div class="c">
+            <div class="swiper">
+                <!-- Additional required wrapper -->
+                <div class="swiper-wrapper">
+                  <!-- Slides -->
+            
+                  <div class="swiper-slide"><img src="naticoco site banner1.png"></div>
+                  <div class="swiper-slide"><img src="naticoco banner2.png"></div>
+                  <div class="swiper-slide"><img src="naticoco banner3.png"></div>
+                 
+                </div>
+                <!-- If we need pagination -->
+                <div class="swiper-pagination"></div>
+              
+                <!-- If we need navigation buttons -->
+              
+              </div>
+        </div>
+    </div>
+    </div>
+
+
+    <!-- Shop by Categories Section -->
+    <section id="categories">
+        <h2>JUICY CHICKEN DELIGHT</h2>
+        <p>Shop by Categories</p>
+        <div class="category-grid">
+            <div class="category-item">
+                <a href="chicken.html">
+                    <img src="chicken logo.jpeg" alt="Chicken">
+                </a>
+                <span class="category-text">CHICKEN</span>
+            </div>
+            <div class="category-item">
+                <a href="marinated.html">
+                    <img src="marinated.jpeg" alt="Marinated">
+                </a>
+                <span class="category-text">MARINATED</span>
+            </div>
+            <div class="category-item">
+                <a href="heat-eat.html">
+                    <img src="heat and eat.jpeg" alt="Heat & Eat">
+                </a>
+                <span class="category-text">HEAT & EAT</span>
+            </div>
+            <div class="category-item">
+                <a href="eggs.html">
+                    <img src="eggs.jpeg" alt="Eggs">
+                </a>
+                <span class="category-text">EGGS</span>
+            </div>
+            <div class="category-item">
+                <a href="spices.html">
+                    <img src="spices.jpeg" alt="Spices">
+                </a>
+                <span class="category-text">SPICES</span>
+            </div>
+            <div class="category-item">
+                <a href="pet-food.html">
+                    <img src="petfood_logo.jpeg" alt="Pet Food">
+                </a>
+                <span class="category-text">PET FOOD</span>
+            </div>
+            <div class="category-item">
+                <a href="mutton.html">
+                    <img src="mutton_logo.jpeg" alt="Mutton">
+                </a>
+                <span class="category-text">MUTTON</span>
+            </div>
+            <div class="category-item">
+                <a href="post-orders.html">
+                    <img src="post_orders.jpeg" alt="Post Orders">
+                </a>
+                <span class="category-text">POST ORDERS</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bestsellers Section -->
+    <section id="bestsellers" class="section ExtraSelection">
+        <h2 class="juicy-heading">Bestsellers</h2>
+        <p id="best">Fresh meats at extra special prices</p>
+        <div class="bestsellers-scroll">
+            <div class="card">
+                <img src="chicken curry cut without skin.png" alt="Chicken Curry Cut - Small Pieces">
+                <h4>Chicken Curry Cut (Without skin)</h4>
+                <div class="small_box">
+                    <div class="small_box_content1">
+                        <p>500 g </p>
+                        <h4>Rs. 159/-</h4>
+                    </div>
+                    <div class="small_box_content2">
+                        <h4>ADD</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="new_Chicken_thigs.jpeg" alt="Chicken_thigs">
+                <h4>Chicken Thigs</h4>
+                <div class="small_box">
+                    <div class="small_box_content1">
+                        <p>500 g | 12-18 Pieces</p>
+                        <h4>Rs. 239/-</h4>
+                    </div>
+                    <div class="small_box_content2">
+                        <h4>ADD</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="Chicken Lollypop (Marinated).jpg" alt="Chicken Lollypop (Marinated)">
+                <h4>Chicken Lollypop (Marinated)</h4>
+                <div class="small_box">
+                    <div class="small_box_content1">
+                        <p>500 g </p>
+                        <h4>Rs. 219/-</h4>
+                    </div>
+                    <div class="small_box_content2">
+                        <h4>ADD</h4>
+                    </div>
+                </div>
+            </div> 
+            <div class="card">
+                <img src="Chicken drumsticks without skin.png" alt="Chicken drumsticks without skin">
+                <h4>Chicken Drumsticks Without Skin</h4>
+                <div class="small_box">
+                    <div class="small_box_content1">
+                        <p>500 g </p>
+                        <h4>Rs. 229/-</h4>
+                    </div>
+                    <div class="small_box_content2">
+                        <h4>ADD</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="chicken breast boneless without skin.jpg" alt="Chicken breast boneless without skin">
+                <h4>Chicken breast boneless without skin</h4>
+                <div class="small_box">
+                    <div class="small_box_content1">
+                        <p>500 g </p>
+                        <h4>Rs. 249/-</h4>
+                    </div>
+                    <div class="small_box_content2">
+                        <h4>ADD</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="Chicken biryani cut without skin.png" alt="Chicken biryani cut without skin">
+                <h4>Chicken biryani cut without skin</h4>
+                <div class="small_box">
+                    <div class="small_box_content1">
+                        <p>500 g </p>
+                        <h4>Rs. 159/-</h4>
+                    </div>
+                    <div class="small_box_content2">
+                        <h4>ADD</h4>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Bestsellers Cards -->
+            <div class="card">
+                <img src="chicken popcorn.jpg" alt="Chicken popcorn">
+                <h4>Chicken Popcorn</h4>
+                <div class="small_box">
+                    <div class="small_box_content1">
+                        <p>250 g </p>
+                        <h4>Rs. 185/-</h4>
+                    </div>
+                    <div class="small_box_content2">
+                        <h4>ADD</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- Repeat similar cards as needed -->
+        </div>
+    </section>
+    
+
+    <!-- New Arrives by nag-->
+     <section class="New_Arrives">
+        <h3>New Arrivals</h3>
+        <div class="Recent_Arrivals">
+            <div class="New_arrive">
+                <img src="new_Chicken_without_Skin.jpeg" alt="">
+                <h4>Chicken Curry Cut</h4>
+                <div class="small_box">
+                    <div class="small_box_content1">
+                        <p>500 grams</p>
+                        <h4>Rs. 159/-</h4>
+                    </div>
+                    <div class="small_box_content2">
+                        <h4>ADD</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="New_arrive">
+                <img src="new_Chicken_thigs.jpeg" alt="">
+                <h4>Chicken Thighs</h4>
+                <div class="small_box">
+                    <div class="small_box_content1">
+                        <p>500 grams</p>
+                        <h4>Rs. 239/-</h4>
+                    </div>
+                    <div class="small_box_content2">
+                        <h4>ADD</h4>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="New_arrive">
+                <img src="new_chicken_lolipop.jpeg" alt="">
+                <h4>Chicken Lollipop</h4>
+                <div class="small_box">
+                    <div class="small_box_content1">
+                        <p>500 grams</p>
+                        <h4>Rs. 219/-</h4>
+                    </div>
+                    <div class="small_box_content2">
+                        <h4>ADD</h4>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="New_arrive">
+                <img src="new_chicken_drumsticks.jpeg" alt="">
+                <h4>Chicken Drumstick</h4>
+                <div class="small_box">
+                    <div class="small_box_content1">
+                        <p>500 grams</p>
+                        <h4>Rs. 229/-</h4>
+                    </div>
+                    <div class="small_box_content2">
+                        <h4>ADD</h4>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="New_arrive">
+                <img src="new_chicken_breast.jpeg" alt="">
+                <h4>Chicken Breast Boneless</h4>
+                <div class="small_box">
+                    <div class="small_box_content1">
+                        <p>500 grams</p>
+                        <h4>Rs. 249/-</h4>
+                    </div>
+                    <div class="small_box_content2">
+                        <h4>ADD</h4>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="New_arrive">
+                <img src="new_chicken_biryani.jpeg" alt="">
+                <h4>Chicken Biryani Cut </h4>
+                <div class="small_box">
+                    <div class="small_box_content1">
+                        <p>500 grams</p>
+                        <h4>Rs. 159/-</h4>
+                    </div>
+                    <div class="small_box_content2">
+                        <h4>ADD</h4>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="New_arrive">
+                <img src="new_Chicken_rolls.jpeg" alt="">
+                <h4>Chicken Popcorn</h4>
+                <div class="small_box">
+                    <div class="small_box_content1">
+                        <p>500 grams</p>
+                        <h4>Rs. 186/-</h4>
+                    </div>
+                    <div class="small_box_content2">
+                        <h4>ADD</h4>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+     </section>
+     
+     
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <!-- Logo Section -->
+        <div class="footer-section footer-logo">
+            <img class="image" src="logo2.jpg" alt="NATICOCO Logo">
+        </div>
+
+        <!-- Legal Information -->
+        <div class="footer-section">
+            <h3>Legal</h3>
+            <ul>
+                <li><a href="#">Terms and Conditions</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Disclaimer</a></li>
+                <li><a href="#">Caution Notice</a></li>
+            </ul>
+        </div>
+
+        <!-- NATICOCO Food -->
+        <div class="footer-section">
+            <h3>NATICOCO Food</h3>
+            <ul>
+                <li><a href="#">Menu</a></li>
+                <li><a href="#">Order Lookup</a></li>
+                <li><a href="#">Gift Card</a></li>
+                <li><a href="#">Nutrition & Allergen</a></li>
+            </ul>
+        </div>
+
+        <!-- Support -->
+        <div class="footer-section">
+            <h3>Support</h3>
+            <ul>
+                <li><a href="#">Get Help</a></li>
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">Feedback</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+            </ul>
+        </div>
+
+        <!-- Find a Store -->
+        <div class="footer-section">
+            <h3>Find a NATICOCO</h3>
+            <ul>
+                <li><a href="#"><img src="map.jpg" alt="map" height="15px"> Find a NATICOCO</a></li>
+            </ul>
+        </div>
+
+        <!-- App Links -->
+        <div class="footer-section">
+            <div class="app-links">
+                <a href="#"><img src="playstore.jpg" alt="Google Play"></a>
+                <a href="#"><img src="appstore.jpg" alt="Apple Store"></a>
+            </div>
+        </div>
+
+        <div style="width: 100%; text-align: center; margin-top: 20px;">
+            <p>&copy; 2024 Naticoco. All Rights Reserved.</p>
+            <p>Naticoco is your one-stop shop for fresh and quality meat and seafood delivery.</p>
+        </div>
+    </footer>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.carousel-slide');
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                if (i === index) {
+                    slide.classList.add('active');
+                }
+            });
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        setInterval(nextSlide, 3000); // Change slide every 3 seconds
+
+        function toggleMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (mobileMenu.style.display === 'block') {
+                mobileMenu.style.display = 'none';
+            } else {
+                mobileMenu.style.display = 'block';
+            }
+        }
+
+
+
+
+
+    const swiper = new Swiper('.swiper', {
+    loop: true, // Enable continuous loop mode
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+    },
+    autoplay: {
+      delay: 3000, // Auto-slide every 3 seconds
+      disableOnInteraction: false,
+    },
+  });
+
+    </script>
+
+</body>
+
+</html>
