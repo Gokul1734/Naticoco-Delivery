@@ -65,7 +65,8 @@ export default function DeliveryProfile() {
  useEffect(() => {
   const fetchRiderDetails = async () => {
     try {
-      const riderdetails = await AsyncStorage.getItem('riderdetail');
+      const riderdetails = await AsyncStorage.getItem('riderDetails');
+      console.log(riderdetails)
       if (riderdetails) {
         const parsedDetails = JSON.parse(riderdetails);
         setProfileData((prev) => ({

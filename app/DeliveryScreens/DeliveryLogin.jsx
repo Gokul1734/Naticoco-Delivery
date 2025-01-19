@@ -30,7 +30,7 @@ const LoginScreen = () => {
       // Configure axios with default headers
       axios.defaults.headers.common['Content-Type'] = 'application/json';
 
-      const response = await axios.post('http://192.168.83.227:3500/Adminstore/delivery/login', {
+      const response = await axios.post('http://192.168.29.242:3500/Adminstore/delivery/login', {
         phonenumber: formattedNumber,
         password: password
       }, {

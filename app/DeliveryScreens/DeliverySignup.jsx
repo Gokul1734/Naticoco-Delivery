@@ -53,7 +53,7 @@ export default function SignUpScreen() {
     };
 
     try {
-      const response = await axios.post('http://192.168.83.227:3500/Adminstore/delivery/Register', {
+      const response = await axios.post('http://192.168.29.242:3500/Adminstore/delivery/Register', {
         name,
         email,
         password,

@@ -103,6 +103,19 @@ export default function DeliveryHome() {
     }
   };
 
+  useEffect(() => {
+    // Fetch orders immediately on mount
+    fetchOrders();
+
+    // Set up interval to fetch orders every 5 seconds
+    const intervalId = setInterval(() => {
+      fetchOrders();
+    }, 500000);
+
+    // Clean up the interval when the component is unmounted
+    return () => clearInterval(intervalId);
+  },);
+
   const toggleAvailability = async () => {
     try {
       const newAvailability = !isAvailable;
