@@ -31,7 +31,7 @@ const LoginScreen = () => {
       // Configure axios with default headers
       axios.defaults.headers.common['Content-Type'] = 'application/json';
 
-      const response = await axios.post('http://192.168.0.105:3500/Adminstore/delivery/login', {
+      const response = await axios.post('http://192.168.83.227:3500/Adminstore/delivery/login', {
         phonenumber: formattedNumber,
         password: password
       }, {
@@ -49,9 +49,11 @@ const LoginScreen = () => {
         }
 
         // Store token and user details
-        await AsyncStorage.setItem('userToken', accessToken);
-        await AsyncStorage.setItem('userDetails', JSON.stringify(user));
+    const riderdetails_token=     await AsyncStorage.setItem('ridertoken', accessToken);
+    await AsyncStorage.setItem('riderdetail', JSON.stringify(user));
 
+    const riderdetails = await AsyncStorage.getItem('riderdetail');
+    console.log(riderdetails); //
         // Navigate to main screen
         navigation.navigate('DeliveryTab', { user });
       } else {

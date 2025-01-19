@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import DScreenBackground from './Components/DScreenBackground';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DeliveryLoadingScreen from './Components/DeliveryLoadingScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const VehicleOption = ({ icon, label, selected, onSelect }) => (
   <TouchableOpacity 
@@ -50,10 +51,37 @@ export default function DeliveryProfile() {
     vehicleType: 'bike',
     vehicleNumber: '',
     aadhaarNumber: '',
+    panCardNumber: '', // New state for PAN card number
+    drivingLicenseNumber: '', // New state for driving license
+    rcDocument: '', // State for RC document file path
   });
+  
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [name,setname] = useState('');
+  
+
+ useEffect(() => {
+  const fetchRiderDetails = async () => {
+    try {
+      const riderdetails = await AsyncStorage.getItem('riderdetail');
+      if (riderdetails) {
+        const parsedDetails = JSON.parse(riderdetails);
+        setProfileData((prev) => ({
+          ...prev,
+          name: parsedDetails.name || '', // Fallback to an empty string if name is missing
+        }));
+      }
+    } catch (error) {
+      console.error('Error fetching rider details:', error);
+    }
+  };
+
+  fetchRiderDetails();
+}, []);
+
+
 
   useEffect(() => {
     // Simulate loading time or fetch profile data
@@ -72,6 +100,7 @@ export default function DeliveryProfile() {
       setProfileData(prev => ({ ...prev, dateOfBirth: selectedDate }));
     }
   };
+
 
   const formatDate = (date) => {
     return date.toLocaleDateString('en-GB', {
