@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity, Image, Dimensions } from 'react-native';
-import { Text, Card, Switch } from 'react-native-paper';
+import { Text, Card, Switch, Button } from 'react-native-paper';
 import { MotiView } from 'moti';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -10,29 +10,42 @@ import DeliveryLoadingScreen from './Components/DeliveryLoadingScreen';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
-const DeliveryCard = ({ orderId, amount, status, onPress }) => (
-  <MotiView
-    from={{ opacity: 0, translateY: 50 }}
-    animate={{ opacity: 1, translateY: 0 }}
-    transition={{ type: 'timing', duration: 1000 }}
-  >
-    <TouchableOpacity onPress={onPress}>
-      <Card style={styles.deliveryCard}>
-        <Card.Content>
-          <Image 
-            source={require('../../assets/images/package.png')} 
-            style={styles.packageIcon}
-          />
-          <Text style={styles.deliveryTitle}>Order #{orderId}</Text>
-          <Text style={styles.deliveryPrice}>Rs {amount}/-</Text>
-          <Text style={[styles.statusText, { color: getStatusColor(status) }]}>
-            {status}
-          </Text>
-        </Card.Content>
-      </Card>
-    </TouchableOpacity>
-  </MotiView>
-);
+const DeliveryCard = ({ order, onPress }) => {
+  const { orderId, amount, status } = order;
+  
+  return (
+    <MotiView
+      from={{ opacity: 0, translateY: 50 }}
+      animate={{ opacity: 1, translateY: 0 }}
+      transition={{ type: 'timing', duration: 1000 }}
+    >
+      <TouchableOpacity onPress={() => onPress()}>
+        <Card style={styles.deliveryCard}>
+          <Card.Content>
+            <Image 
+              source={require('../../assets/images/package.png')} 
+              style={styles.packageIcon}
+            />
+            <Text style={styles.deliveryTitle}>Order #{orderId}</Text>
+            <Text style={styles.deliveryPrice}>Rs {amount}/-</Text>
+            <Text style={[styles.statusText, { color: getStatusColor(status) }]}>
+              {status}
+            </Text>
+            {status === 'READY' && (
+              <Button 
+                mode="contained" 
+                style={styles.startButton}
+                onPress={() => onPress(true)}
+              >
+                Start Delivery
+              </Button>
+            )}
+          </Card.Content>
+        </Card>
+      </TouchableOpacity>
+    </MotiView>
+  );
+};
 
 const getStatusColor = (status) => {
   switch (status) {
@@ -51,6 +64,8 @@ export default function DeliveryHome() {
   const [userDetails, setUserDetails] = useState(null);
   const [isAvailable, setIsAvailable] = useState(false);
   const [orders, setOrders] = useState([]);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [currentLocation, setCurrentLocation] = useState(null);
 
   useEffect(() => {
     loadUserDetails();
@@ -106,13 +121,49 @@ export default function DeliveryHome() {
     }
   };
 
+  const handleOrderPress = async (orderId, startDelivery = false) => {
+    if (!startDelivery) {
+      navigation.navigate('OrderDetails', { orderId });
+      return;
+    }
+    console.log(orderId);
+    try {
+      const response = await axios.post(
+        'http://192.168.29.242:3500/DeliveryPerson/location',
+        { orderId : orderId }
+      );
+      console.log(response.data);
+
+  
+      if (response.data) {
+        const { storeLocation, customerLocation } = response.data;
+        
+        // Navigate to LocationScreen with both locations
+        navigation.navigate('DeliveryMap', {
+          orderId,
+          storeLocation,
+          customerLocation,
+          initialRegion: {
+            latitude: storeLocation.latitude,
+            longitude: storeLocation.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching delivery location:', error);
+      Alert.alert(
+        'Error',
+        'Unable to fetch delivery location. Please try again.',
+        [{ text: 'OK' }]
+      );
+    }
+  };
+
   if (isLoading) {
     return <DeliveryLoadingScreen />;
   }
-
-  const handleOrderPress = (orderId) => {
-    navigation.navigate('OrderDetails', { orderId });
-  };
 
   return (
     <DScreenBackground>
@@ -164,10 +215,8 @@ export default function DeliveryHome() {
               .map(order => (
                 <DeliveryCard
                   key={order._id}
-                  orderId={order.orderId}
-                  amount={order.amount}
-                  status={order.status}
-                  onPress={() => handleOrderPress(order._id)}
+                  order={order}
+                  onPress={(startDelivery) => handleOrderPress(order.orderId, startDelivery)}
                 />
               ))
             }
@@ -187,9 +236,7 @@ export default function DeliveryHome() {
               .map(order => (
                 <DeliveryCard
                   key={order._id}
-                  orderId={order.orderId}
-                  amount={order.amount}
-                  status={order.status}
+                  order={order}
                   onPress={() => handleOrderPress(order._id)}
                 />
               ))
@@ -212,26 +259,8 @@ export default function DeliveryHome() {
     </DScreenBackground>
   );
 }
+
 const styles = StyleSheet.create({
-  statusText: {
-    fontSize: 12,
-    fontWeight: '500',
-    marginTop: 5,
-    textTransform: 'uppercase'
-  },
-  orderAmount: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#F8931F',
-    marginTop: 5
-  },
-  orderCard: {
-    width: 160,
-    marginRight: 15,
-    borderRadius: 15,
-    backgroundColor: '#fff',
-    elevation: 3
-  },
   container: {
     flex: 1,
     padding: 20,
@@ -278,25 +307,11 @@ const styles = StyleSheet.create({
     color: '#333',
     fontWeight: '500',
   },
-  todaySection: {
-    marginBottom: 30,
-  },
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
     marginBottom: 15,
     color: '#333',
-  },
-  imageContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 20,
-  },
-  deliveryImage: {
-    borderRadius: 15,
-  },
-  deliveryDetailsSection: {
-    marginBottom: 30,
   },
   cardsContainer: {
     marginHorizontal: -20,
@@ -322,6 +337,20 @@ const styles = StyleSheet.create({
     color: '#F8931F',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  statusText: {
+    fontSize: 12,
+    fontWeight: '500',
+    marginTop: 5,
+    textTransform: 'uppercase',
+    color: 'white',
+  },
+  startButton: {
+    marginTop: 10,
+    backgroundColor: '#F8931F',
+  },
+  deliveryDetailsSection: {
+    marginBottom: 30,
   },
   updatesSection: {
     marginBottom: 30,
