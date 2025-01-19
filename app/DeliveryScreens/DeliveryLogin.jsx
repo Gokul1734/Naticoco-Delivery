@@ -13,7 +13,6 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
-
 const LoginScreen = () => {
   const [phonenumber, setPhonenumber] = useState('');
   const [password, setPassword] = useState('');
@@ -49,9 +48,10 @@ const LoginScreen = () => {
         }
 
         // Store token and user details
-        await AsyncStorage.setItem('userToken', accessToken);
-        await AsyncStorage.setItem('userDetails', JSON.stringify(user));
-
+        await AsyncStorage.setItem('riderToken', accessToken);
+        await AsyncStorage.setItem('riderDetails', JSON.stringify(user));
+        console.log(user);
+        
         // Navigate to main screen
         navigation.navigate('DeliveryTab', { user });
       } else {
