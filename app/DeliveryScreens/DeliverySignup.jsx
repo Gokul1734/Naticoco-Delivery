@@ -53,7 +53,7 @@ export default function SignUpScreen() {
     };
 
     try {
-      const response = await axios.post('http://192.168.0.105:3500/Adminstore/delivery/Register', data, {
+      const response = await axios.post('http://192.168.83.227:3500/Adminstore/delivery/Register', data, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -63,7 +63,7 @@ export default function SignUpScreen() {
       if (response.status === 200) {
         try {
           console.log('Attempting to generate OTP:', mobileNumber);
-          const otpResponse = await axios.post('http://192.168.0.105:3500/Adminstore/delivery/generate-otp', {
+          const otpResponse = await axios.post('http://192.168.83.227:3500/Adminstore/delivery/generate-otp', {
             phonenumber: mobileNumber
           });
           
@@ -107,7 +107,7 @@ export default function SignUpScreen() {
 
   const verifyOTP = async (otp) => {
     try {
-      const response = await axios.post('http://192.168.0.105:3500/Adminstore/delivery/verify-otp', {
+      const response = await axios.post('http://192.168.83.227:3500/Adminstore/delivery/verify-otp', {
         phonenumber: mobileNumber,
         otp: otp.join('')
       });
