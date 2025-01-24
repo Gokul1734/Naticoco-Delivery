@@ -66,7 +66,7 @@ export default function LocationScreen({ route, navigation }) {
   const verifyStoreOTP = async () => {
     setLoading(true);
     try {
-      const response = await axios.post('http://192.168.29.242:3500/DeliveryPerson/verify-store-otp', {
+      const response = await axios.post('http://192.168.0.105:3500/DeliveryPerson/verify-store-otp', {
         orderId,
         otp
       });

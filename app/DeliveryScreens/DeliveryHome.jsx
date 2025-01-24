@@ -94,7 +94,7 @@ export default function DeliveryHome() {
 
   const fetchOrders = async () => {
     try {
-      const response = await axios.get(`http://192.168.29.242:3500/Adminstore/delivery/orders/${userDetails._id}`);
+      const response = await axios.get(`http://192.168.0.105:3500/Adminstore/delivery/orders/${userDetails._id}`);
       if (response.data) {
         setOrders(response.data);
       }
@@ -119,7 +119,7 @@ export default function DeliveryHome() {
   const toggleAvailability = async () => {
     try {
       const newAvailability = !isAvailable;
-      const response = await axios.patch(`http://192.168.29.242:3500/Adminstore/delivery/availability/${userDetails._id}`, {
+      const response = await axios.patch(`http://192.168.0.105:3500/Adminstore/delivery/availability/${userDetails._id}`, {
         availability: newAvailability
       });
       
@@ -142,7 +142,7 @@ export default function DeliveryHome() {
     console.log(orderId);
     try {
       const response = await axios.post(
-        'http://192.168.29.242:3500/DeliveryPerson/location',
+        'http://192.168.0.105:3500/DeliveryPerson/location',
         { orderId : orderId }
       );
       console.log(response.data);
