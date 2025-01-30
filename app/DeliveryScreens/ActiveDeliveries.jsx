@@ -94,6 +94,7 @@ export default function ActiveDeliveries() {
   };
 
   const openGoogleMapsNavigation = () => {
+    console.log('Open Google Maps Navigation');
     const destination = activeDelivery.status === 'PICKING_UP'
       ? activeDelivery.store.location
       : activeDelivery.customer.location;
@@ -102,7 +103,7 @@ export default function ActiveDeliveries() {
       ios: `comgooglemaps://?daddr=${destination.latitude},${destination.longitude}&directionsmode=driving`,
       android: `google.navigation:q=${destination.latitude},${destination.longitude}&mode=d`,
     });
-
+    console.log(destination.latitude, destination.longitude);
     Linking.canOpenURL(url).then(supported => {
       if (supported) {
         Linking.openURL(url);

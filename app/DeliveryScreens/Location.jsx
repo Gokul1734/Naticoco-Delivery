@@ -11,7 +11,7 @@ const GOOGLE_MAPS_API_KEY = 'AIzaSyD9YLhonLv3JjCCVjBv06W1el67IXr19bY';
 const { width, height } = Dimensions.get('window');
 
 export default function LocationScreen({ route, navigation }) {
-  const { orderId, storeLocation, customerLocation, initialRegion } = route.params;
+  const { orderId } = route.params;
   const mapRef = useRef(null);
   const [currentLocation, setCurrentLocation] = useState(null);
   const [isRideStarted, setIsRideStarted] = useState(false);
@@ -21,10 +21,30 @@ export default function LocationScreen({ route, navigation }) {
   const [distance, setDistance] = useState(null);
   const [duration, setDuration] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [orderDetails, setOrderDetails] = useState(null);
 
   useEffect(() => {
     startLocationTracking();
+    fetchOrderDetails();
   }, []);
+
+  const fetchOrderDetails = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`http://192.168.29.242:3500/Adminstore/delivery/deliveryocation`,{
+        orderId:orderId
+      });
+      if (response.data.success) {
+        setOrderDetails(response.data.data);
+      } else {
+        Alert.alert('Error', response.data.message);
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Failed to fetch order details');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const startLocationTracking = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
@@ -33,7 +53,6 @@ export default function LocationScreen({ route, navigation }) {
       return;
     }
 
-    // Start watching position
     Location.watchPositionAsync(
       {
         accuracy: Location.Accuracy.High,
@@ -63,37 +82,12 @@ export default function LocationScreen({ route, navigation }) {
     Alert.alert('Ride Started', 'Head to the store location to pick up the order');
   };
 
-  const verifyStoreOTP = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.post('http://192.168.29.242:3500/DeliveryPerson/verify-store-otp', {
-        orderId,
-        otp
-      });
-      
-      if (response.data.success) {
-        setIsStoreVerified(true);
-        setShowOtpModal(false);
-        Alert.alert('Success', 'Store verification successful! Proceed to customer location.');
-      } else {
-        Alert.alert('Error', 'Invalid OTP. Please try again.');
-      }
-    } catch (error) {
-      Alert.alert('Error', 'Failed to verify OTP. Please try again.');
-    } finally {
-      setLoading(false);
-      setOtp('');
-    }
-  };
-
-  const destination = isStoreVerified ? customerLocation : storeLocation;
-
   const checkProximityToStore = () => {
-    if (!currentLocation) return;
+    if (!currentLocation || !orderDetails) return;
     
     const storeLatLng = {
-      latitude: storeLocation.latitude,
-      longitude: storeLocation.longitude,
+      latitude: orderDetails.storeLocation.latitude,
+      longitude: orderDetails.storeLocation.longitude,
     };
     
     const distance = getDistance(currentLocation, storeLatLng);
@@ -102,6 +96,23 @@ export default function LocationScreen({ route, navigation }) {
     } else {
       Alert.alert('Not at store', 'Please reach the store location to verify OTP');
     }
+  };
+
+  if (!orderDetails) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#F8931F" />
+        <Text>Loading order details...</Text>
+      </View>
+    );
+  }
+
+  const destination = isStoreVerified ? orderDetails.deliveryLocation : orderDetails.storeLocation;
+  const initialRegion = {
+    latitude: orderDetails.storeLocation.latitude,
+    longitude: orderDetails.storeLocation.longitude,
+    latitudeDelta: 0.1,
+    longitudeDelta: 0.1,
   };
 
   return (
@@ -127,10 +138,10 @@ export default function LocationScreen({ route, navigation }) {
 
         <Marker
           coordinate={{
-            latitude: storeLocation.latitude,
-            longitude: storeLocation.longitude,
+            latitude: orderDetails.storeLocation.latitude,
+            longitude: orderDetails.storeLocation.longitude,
           }}
-          title={storeLocation.name}
+          title={orderDetails.storeLocation.name}
           description="Store Location"
         >
           <View style={styles.storeMarker}>
@@ -138,13 +149,13 @@ export default function LocationScreen({ route, navigation }) {
           </View>
         </Marker>
 
-        {isStoreVerified && customerLocation && (
+        {isStoreVerified && (
           <Marker
             coordinate={{
-              latitude: customerLocation.latitude,
-              longitude: customerLocation.longitude,
+              latitude: orderDetails.deliveryLocation.latitude,
+              longitude: orderDetails.deliveryLocation.longitude,
             }}
-            title={customerLocation.name}
+            title={orderDetails.deliveryLocation.name}
             description="Customer Location"
           >
             <View style={styles.customerMarker}>
@@ -215,7 +226,7 @@ export default function LocationScreen({ route, navigation }) {
           <View style={styles.destinationInfo}>
             <FontAwesome5 name="user" size={24} color="#F8931F" />
             <Text style={styles.destinationText}>
-              Delivering to: {customerLocation.name}
+              Delivering to: {orderDetails.deliveryLocation.name}
             </Text>
           </View>
         )}
@@ -282,6 +293,11 @@ const styles = StyleSheet.create({
     elevation: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
   },
   statusText: {

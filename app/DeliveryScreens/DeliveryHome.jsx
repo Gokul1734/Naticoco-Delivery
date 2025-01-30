@@ -142,12 +142,10 @@ export default function DeliveryHome() {
     console.log(orderId);
     try {
       const response = await axios.post(
-        'http://192.168.29.242:3500/DeliveryPerson/location',
+        'http://192.168.29.242:3500/Adminstore/delivery/deliveryocation',
         { orderId : orderId }
       );
       console.log(response.data);
-
-  
       if (response.data) {
         const { storeLocation, customerLocation } = response.data;
         
