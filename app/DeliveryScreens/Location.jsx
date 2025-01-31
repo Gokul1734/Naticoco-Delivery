@@ -29,23 +29,24 @@ export default function LocationScreen({ route, navigation }) {
   }, []);
 
   const fetchOrderDetails = async () => {
-    setLoading(true);
+    // setLoading(true);
     try {
-      const response = await axios.get(`http://192.168.29.242:3500/Adminstore/delivery/deliveryocation`,{
+      const response = await axios.post(`http://192.168.29.165:3500/Adminstore/delivery/deliveryocation`,{
         orderId:orderId
       });
-      if (response.data.success) {
-        setOrderDetails(response.data.data);
+      // console.log(response.data.data);
+      if (response.status == 200) {
+        setOrderDetails(response.data);
+        setLoading(false);
       } else {
         Alert.alert('Error', response.data.message);
       }
     } catch (error) {
       Alert.alert('Error', 'Failed to fetch order details');
-    } finally {
-      setLoading(false);
     }
   };
 
+  console.log(orderDetails);
   const startLocationTracking = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
@@ -119,7 +120,6 @@ export default function LocationScreen({ route, navigation }) {
     <View style={styles.container}>
       <MapView
         ref={mapRef}
-        provider={PROVIDER_GOOGLE}
         style={styles.map}
         initialRegion={initialRegion}
         showsUserLocation={true}

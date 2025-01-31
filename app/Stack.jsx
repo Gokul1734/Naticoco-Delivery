@@ -41,6 +41,7 @@ import { Dimensions } from "react-native";
 import LoginScreen from "./DeliveryScreens/DeliveryLogin";
 import SignUp from "./DeliveryScreens/DeliverySignup";
 import Map from "./DeliveryScreens/Location";
+import DeliveryMap from "./DeliveryScreens/DeliveryMap";
 // import LoadingScreen from "./CustomerScreens/Components/LoadingScreen";
 // import ScreenBackground from "./CustomerScreens/Components/ScreenBackground";
 
@@ -93,7 +94,7 @@ export default function StackNavigator() {
         />
         <Stack.Screen
           name="DeliveryMap"
-          component={Map}
+          component={DeliveryMap}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

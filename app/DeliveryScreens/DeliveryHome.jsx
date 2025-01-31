@@ -37,7 +37,7 @@ const DeliveryCard = ({ order, onPress }) => {
                 style={styles.startButton}
                 onPress={() => onPress(true)}
               >
-                Start Delivery
+                Start
               </Button>
             )}
           </Card.Content>
@@ -94,10 +94,12 @@ export default function DeliveryHome() {
 
   const fetchOrders = async () => {
     try {
-      const response = await axios.get(`http://192.168.29.242:3500/Adminstore/delivery/orders/${userDetails._id}`);
-      if (response.data) {
+      const id = userDetails._id;
+      const response = await axios.get(`http://192.168.29.165:3500/Adminstore/delivery/orders/${id}`);
+      if (response.data != undefined) {
         setOrders(response.data);
       }
+      // console.log(orders);
     } catch (error) {
       console.error('Error fetching orders:', error);
     }
@@ -110,7 +112,7 @@ export default function DeliveryHome() {
     // Set up interval to fetch orders every 5 seconds
     const intervalId = setInterval(() => {
       fetchOrders();
-    }, 500000);
+    }, 5000);
 
     // Clean up the interval when the component is unmounted
     return () => clearInterval(intervalId);
@@ -119,7 +121,7 @@ export default function DeliveryHome() {
   const toggleAvailability = async () => {
     try {
       const newAvailability = !isAvailable;
-      const response = await axios.patch(`http://192.168.29.242:3500/Adminstore/delivery/availability/${userDetails._id}`, {
+      const response = await axios.patch(`http://192.168.29.165:3500/Adminstore/delivery/availability/${userDetails._id}`, {
         availability: newAvailability
       });
       
@@ -142,21 +144,21 @@ export default function DeliveryHome() {
     console.log(orderId);
     try {
       const response = await axios.post(
-        'http://192.168.29.242:3500/Adminstore/delivery/deliveryocation',
+        'http://192.168.29.165:3500/Adminstore/delivery/deliveryocation',
         { orderId : orderId }
       );
       console.log(response.data);
       if (response.data) {
-        const { storeLocation, customerLocation } = response.data;
+        const { StoreLocation, CustomerLocation } = response.data;
         
         // Navigate to LocationScreen with both locations
         navigation.navigate('DeliveryMap', {
           orderId,
-          storeLocation,
-          customerLocation,
+          StoreLocation,
+          CustomerLocation,
           initialRegion: {
-            latitude: storeLocation.latitude,
-            longitude: storeLocation.longitude,
+            latitude: StoreLocation.latitude,
+            longitude: StoreLocation.longitude,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }
@@ -191,16 +193,6 @@ export default function DeliveryHome() {
             </TouchableOpacity>
           </View>
           <View style={styles.headerRight}>
-            <View style={styles.availabilityContainer}>
-              <Text style={styles.availabilityText}>
-                {isAvailable ? 'Available' : 'Unavailable'}
-              </Text>
-              <Switch
-                value={isAvailable}
-                onValueChange={toggleAvailability}
-                color="#F8931F"
-              />
-            </View>
             <TouchableOpacity 
               style={styles.profileButton}
               onPress={() => navigation.navigate('Profile')}
@@ -212,6 +204,16 @@ export default function DeliveryHome() {
             </TouchableOpacity>
           </View>
         </View>
+        <View style={styles.availabilityContainer}>
+              <Text style={styles.availabilityText}>
+                {isAvailable ? 'Available' : 'Unavailable'}
+              </Text>
+              <Switch
+                value={isAvailable}
+                onValueChange={toggleAvailability}
+                color="#F8931F"
+              />
+            </View>
 
         {/* Active Orders Section */}
         <View style={styles.deliveryDetailsSection}>
@@ -222,7 +224,7 @@ export default function DeliveryHome() {
             style={styles.cardsContainer}
           >
             {orders
-              .filter(order => ['PENDING', 'PREPARING', 'READY'].includes(order.status))
+              .filter(order => ['ACCEPTED', 'PREPARING', 'READY'].includes(order.status))
               .map(order => (
                 <DeliveryCard
                   key={order._id}
@@ -298,6 +300,10 @@ const styles = StyleSheet.create({
     color: '#F8931F',
   },
   availabilityContainer: {
+    alignSelf : 'center',
+    justifyContent : 'center',
+    width : '50%',
+    marginBottom: 20,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#fff',

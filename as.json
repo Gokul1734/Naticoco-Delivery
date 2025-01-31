@@ -6,11 +6,7 @@
   "availability": true,
   "category": "chicken",
   "description": "Liver chicken Fresh ",
-<<<<<<< HEAD
-  "image": "http://192.168.29.242:3500/ImageStore//ImageStore/1735884093905-Chicken liver.jpg",
-=======
-  "image": "http://192.168.29.242:3500/ImageStore//ImageStore/1735884093905-Chicken liver.jpg",
->>>>>>> 0c2d7b5cae392feb68e49b438eb60e5d15819442
+  "image": "http://192.168.29.165:3500/ImageStore//ImageStore/1735884093905-Chicken liver.jpg",
   "itemName": "Chicken Liver",
   "newArrival": true,
   "price": 200,
@@ -24,11 +20,7 @@
   "availability": true,
   "category": "chicken",
   "description": "Natichicken Fresh ",
-<<<<<<< HEAD
-  "image": "http://192.168.29.242:3500/ImageStore//ImageStore/1735884154393-Chicken whole leg without skin.png",
-=======
-  "image": "http://192.168.29.242:3500/ImageStore//ImageStore/1735884154393-Chicken whole leg without skin.png",
->>>>>>> 0c2d7b5cae392feb68e49b438eb60e5d15819442
+  "image": "http://192.168.29.165:3500/ImageStore//ImageStore/1735884154393-Chicken whole leg without skin.png",
   "itemName": "ChickenNati",
   "newArrival": true,
   "price": 200,
@@ -42,13 +34,8 @@
   "availability": true,
   "category": "chicken",
   "descility": true,
-  "category": "chicken",
   "description": "chicken TandooriFresh ",
-<<<<<<< HEAD
-  "image": "http://192.168.29.242:3500/ImageStore//ImageStore/1735884245879-Tandoori Chicken Tikka.jpg",
-=======
-  "image": "http://192.168.29.242:3500/ImageStore//ImageStore/1735884245879-Tandoori Chicken Tikka.jpg",
->>>>>>> 0c2d7b5cae392feb68e49b438eb60e5d15819442
+  "image": "http://192.168.29.165:3500/ImageStore//ImageStore/1735884245879-Tandoori Chicken Tikka.jpg",
   "itemName": "chicken Tandoori",
   "newArrival": true,
   "price": 200,
@@ -62,11 +49,7 @@
   "availability": true,
   "category": "chicken",
   "description": "chicken Meatball Fresh ",
-<<<<<<< HEAD
-  "image": "http://192.168.29.242:3500/ImageStore//ImageStore/1735884303613-chicken Meatballs.jpg",
-=======
-  "image": "http://192.168.29.242:3500/ImageStore//ImageStore/1735884303613-chicken Meatballs.jpg",
->>>>>>> 0c2d7b5cae392feb68e49b438eb60e5d15819442
+  "image": "http://192.168.29.165:3500/ImageStore//ImageStore/1735884303613-chicken Meatballs.jpg",
   "itemName": "chicken Meatball",
   "newArrival": true,
   "price": 200,
