@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, Image, Dimensions } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity, Image, Dimensions, Alert } from 'react-native';
 import { Text, Card, Switch, Button } from 'react-native-paper';
 import { MotiView } from 'moti';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -152,7 +152,13 @@ export default function DeliveryHome() {
         const { StoreLocation, CustomerLocation } = response.data;
         
         // Navigate to LocationScreen with both locations
-        navigation.navigate('DeliveryMap', {
+        Alert.alert('Do you want to take up this order', 'Confirm to Proceed', [
+         {
+           text: 'Cancel',
+           onPress: () => console.log('Cancel Pressed'),
+           style: 'cancel',
+         },
+         {text: 'Confirm', onPress: () => navigation.navigate('DeliveryMap', {
           orderId,
           StoreLocation,
           CustomerLocation,
@@ -162,7 +168,8 @@ export default function DeliveryHome() {
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }
-        });
+        })},
+       ]);
       }
     } catch (error) {
       console.error('Error fetching delivery location:', error);

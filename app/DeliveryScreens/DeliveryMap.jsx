@@ -42,7 +42,7 @@ const DeliveryMap = () => {
 
   // const CustomerLocation = [13.054396166290767, 80.256687144931];
 
-  const [currentLocation, setCurrentLocation] = useState([13.054396166290767, 80.256687144931]);
+  const [currentLocation, setCurrentLocation] = useState({"latitude": 13.042999295973052, "longitude": 80.24179707342626});
   const [navigationStage, setNavigationStage] = useState('store');
   const [distance, setDistance] = useState(null);
   const [duration, setDuration] = useState(null);
@@ -128,7 +128,7 @@ const DeliveryMap = () => {
      longitude: StoreLocation.longitude,
    };
    
-   const distance = getDistance({"latitude": 13.042999295973052, "longitude": 80.24179707342626}, storeLatLng);
+   const distance = getDistance(currentLocation, storeLatLng);
    if (distance < 0.1) { // Within 100 meters
      fetchOtp();
      // console.log(getOtp);
@@ -144,8 +144,12 @@ const DeliveryMap = () => {
       if (navigationStage === 'store') {
         checkProximityToStore();
       } else if (navigationStage === 'customer') {
-        setShowOtpModal(true);
-        navigation.navigate('DeliveryHome');
+        if (getDistance(currentLocation,{"latitude": 13.042999295973052, "longitude": 80.24179707342626}) < 0.1) {
+         setShowOtpModal(true);
+         navigation.navigate('DeliveryHome');
+        } else {
+         Alert.alert("You are far away from the delivery Locaiton !!");
+        }
       }
     } catch (error) {
       console.error('Error updating order status:', error);
@@ -210,48 +214,77 @@ const DeliveryMap = () => {
     );
   };
 
+  const renderMapContent = () => { 
+    if (navigationStage == 'store') {
+     return (
+      (
+       <MapView
+       ref={mapRef}
+       style={[styles.map,StyleSheet.absoluteFill]}
+       initialRegion={initialRegion}
+       showsUserLocation
+       followsUserLocation
+       showsMyLocationButton
+     >
+       {/* Store Marker */}
+       <Marker
+         coordinate={StoreLocation}
+         title="Store Location"
+         pinColor="green"
+       />
+
+        <MapViewDirections             // Delivery person going to Store
+          origin={initialRegion}
+          destination={StoreLocation}
+          apikey={GOOGLE_MAPS_API_KEY}
+          strokeWidth={6}
+          strokeColor="#000"
+          optimizeWaypoints={true}
+        />
+     </MapView>
+)
+     )
+    } else if (navigationStage == 'customer') {
+     return (
+
+      <MapView
+       ref={mapRef}
+       style={[styles.map,StyleSheet.absoluteFill]}
+       initialRegion={initialRegion}
+       showsUserLocation
+       followsUserLocation
+       showsMyLocationButton
+     >
+             <Marker
+         coordinate={StoreLocation}
+         title="Store Location"
+         pinColor="green"
+       />
+       {/* Customer Marker */}
+       <Marker
+         coordinate={CustomerLocation}
+         title="Delivery Location"
+         pinColor="red"
+       />
+        <MapViewDirections           // Delivery person going to Delivery Location from store
+           origin={StoreLocation}
+           destination={CustomerLocation}
+           apikey={GOOGLE_MAPS_API_KEY}
+           strokeWidth={6}
+           strokeColor="green"
+           optimizeWaypoints={true}
+        /> 
+     </MapView>
+      )
+    }
+
+  }
+   
+
   return (
     <View style={styles.container}>
       {currentLocation && (
-        <MapView
-          ref={mapRef}
-          style={[styles.map,StyleSheet.absoluteFill]}
-          initialRegion={initialRegion}
-          showsUserLocation
-          followsUserLocation
-          showsMyLocationButton
-        >
-          {/* Store Marker */}
-          <Marker
-            coordinate={{latitude : 13.049479760561033,longitude :  80.25313145517626}}
-            title="Store Location"
-            pinColor="green"
-          />
-
-          {/* Customer Marker */}
-          <Marker
-            coordinate={{latitude : 13.054396166290767,longitude : 80.256687144931}}
-            title="Delivery Location"
-            pinColor="red"
-          />
-
-          <MapViewDirections             // Delivery person going to Store
-             origin={initialRegion}
-             destination={{latitude : 13.049479760561033,longitude :  80.25313145517626}}
-             apikey={GOOGLE_MAPS_API_KEY}
-             strokeWidth={6}
-             strokeColor="#000"
-             optimizeWaypoints={true}
-           />
-           <MapViewDirections           // Delivery person going to Delivery Location from store
-              origin={{latitude : 13.049479760561033,longitude :  80.25313145517626}}
-              destination={{latitude : 13.054396166290767,longitude : 80.256687144931}}
-              apikey={GOOGLE_MAPS_API_KEY}
-              strokeWidth={6}
-              strokeColor="green"
-              optimizeWaypoints={true}
-           />
-        </MapView>
+        renderMapContent()
       )}
 
       {/* Navigation Info Overlay */}
