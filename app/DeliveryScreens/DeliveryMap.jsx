@@ -6,7 +6,10 @@ import {
   TouchableOpacity, 
   Platform,
   PermissionsAndroid,
-  Alert
+  Alert,
+  Modal,
+  TextInput,
+  ActivityIndicator
 } from 'react-native';
 import MapView, { 
   Marker, 
@@ -18,7 +21,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { MotiView } from 'moti';
 import MapViewDirections from 'react-native-maps-directions';
-
+const { width, height } = Dimensions.get('window');
 // Replace with your actual API key
 const GOOGLE_MAPS_API_KEY = 'AIzaSyD9YLhonLv3JjCCVjBv06W1el67IXr19bY';
 
@@ -26,7 +29,10 @@ const DeliveryMap = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const mapRef = useRef(null);
-
+  const [showOtpModal, setShowOtpModal] = useState(false);
+  const [otp, setOtp] = useState('');
+  const [getOtp,setGetOtp] = useState(0);
+  const [loading, setLoading] = useState(false);
   const { 
     orderId, 
     StoreLocation, 
@@ -41,9 +47,27 @@ const DeliveryMap = () => {
   const [distance, setDistance] = useState(null);
   const [duration, setDuration] = useState(null);
 
+
   useEffect(() => {
     requestLocationPermission();
   }, []);
+
+
+  const fetchOtp = async () => {
+   try {
+    const response = await axios.post("http://192.168.29.165:3500/Adminstore/delivery/getOtp" ,{
+    orderId : orderId
+   });
+   if (response.status == 200) {
+    setGetOtp(response.data.data.deliveryOTP);
+    console.log(response.data.data.deliveryOTP);
+    Alert.alert(`Your OTP : ${response.data.data.deliveryOTP}`);
+   }
+   } catch (e) {
+    console.log(e);
+   }
+
+  };
 
   const requestLocationPermission = async () => {
     if (Platform.OS === 'android') {
@@ -96,19 +120,31 @@ const DeliveryMap = () => {
     );
   };
 
+  const checkProximityToStore = () => {
+   if (!currentLocation || !StoreLocation) return;
+   
+   const storeLatLng = {
+     latitude: StoreLocation.latitude,
+     longitude: StoreLocation.longitude,
+   };
+   
+   const distance = getDistance({"latitude": 13.042999295973052, "longitude": 80.24179707342626}, storeLatLng);
+   if (distance < 0.1) { // Within 100 meters
+     fetchOtp();
+     // console.log(getOtp);
+     // setOtp(123456);
+     setNavigationStage('customer');
+   } else {
+     Alert.alert('Not at store', 'Please reach the store location to verify OTP');
+   }
+ };
+
   const handleNavigationStage = async () => {
     try {
       if (navigationStage === 'store') {
-        await axios.patch(
-          `http://192.168.29.165:3500/Adminstore/delivery/updateStatus/${orderId}`,
-          { status: 'PICKED_UP' }
-        );
-        setNavigationStage('customer');
+        checkProximityToStore();
       } else if (navigationStage === 'customer') {
-        await axios.patch(
-          `http://192.168.29.165:3500/Adminstore/delivery/updateStatus/${orderId}`,
-          { status: 'COMPLETED' }
-        );
+        setShowOtpModal(true);
         navigation.navigate('DeliveryHome');
       }
     } catch (error) {
@@ -121,28 +157,14 @@ const DeliveryMap = () => {
     }
   };
 
-  const checkProximityToStore = () => {
-   if (!currentLocation || !orderDetails) return;
-   
-   const storeLatLng = {
-     latitude: orderDetails.storeLocation.latitude,
-     longitude: orderDetails.storeLocation.longitude,
-   };
-   
-   const distance = getDistance(currentLocation, storeLatLng);
-   if (distance < 0.1) { // Within 100 meters
-     setShowOtpModal(true);
-   } else {
-     Alert.alert('Not at store', 'Please reach the store location to verify OTP');
-   }
- };
+
 
   const renderNavigationInfo = () => {
     const stageDetails = {
       store: {
         title: 'Navigate to Store',
         description: 'Pick up the order from the store location',
-        buttonText: 'Pick Up Order'
+        buttonText: 'GET OTP'
       },
       customer: {
         title: 'Navigate to Customer',
@@ -161,25 +183,27 @@ const DeliveryMap = () => {
         style={styles.navigationInfoContainer}
       >
         <Card style={styles.navigationCard}>
-          <View style={styles.navigationCardContent}>
+          <View style={styles.navigationTextContainer}>
+            <View style={styles.navigationCardContent}>
             <MaterialIcons 
               name={navigationStage === 'store' ? 'store' : 'home'} 
               size={40} 
               color="#F8931F" 
             />
+            <Text style={styles.navigationTitle}>{currentStage.title}</Text>
+            </View>
             <View style={styles.navigationTextContainer}>
-              <Text style={styles.navigationTitle}>{currentStage.title}</Text>
               <Text style={styles.navigationDescription}>
                 {currentStage.description}
               </Text>
-            </View>
-            <Button 
+              <Button 
               mode="contained" 
               style={styles.navigationButton}
               onPress={handleNavigationStage}
             >
               {currentStage.buttonText}
             </Button>
+            </View>
           </View>
         </Card>
       </MotiView>
@@ -240,6 +264,47 @@ const DeliveryMap = () => {
       >
         <MaterialIcons name="arrow-back" size={24} color="#333" />
       </TouchableOpacity>
+
+
+      <Modal
+        visible={showOtpModal}
+        transparent={true}
+        animationType="slide"
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Enter Customer's OTP</Text>
+            <TextInput
+              style={styles.otpInput}
+              value={otp}
+              onChangeText={setOtp}
+              placeholderTextColor={'black'}
+              placeholder="Enter 4-digit OTP"
+              keyboardType="numeric"
+              maxLength={4}
+            />
+            <View style={styles.modalButtons}>
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={() => setShowOtpModal(false)}
+              >
+                <Text style={[styles.modalButtonText,{backgroundColor : 'red'}]}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.verifyButton]}
+                onPress={() => {console.log(`OTP : ${otp}`)}}
+                disabled={loading}
+              >
+                {loading ? (
+                  <ActivityIndicator color="white" />
+                ) : (
+                  <Text style={[styles.modalButtonText,{backgroundColor : 'green'}]}>Verify</Text>
+                )}
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -292,7 +357,7 @@ const styles = StyleSheet.create({
  navigationDescription: {
    fontSize: 14,
    color: '#666',
-   marginTop: 5,
+   marginVertical: 10,
  },
  navigationStats: {
    fontSize: 12,
@@ -302,6 +367,51 @@ const styles = StyleSheet.create({
  navigationButton: {
    backgroundColor: '#F8931F',
  },
+ modalContainer: {
+  flex: 1,
+  backgroundColor: 'rgba(0,0,0,0.5)',
+  justifyContent: 'center',
+  alignItems: 'center',
+},
+modalContent: {
+  backgroundColor: 'white',
+  width: width * 0.8,
+  padding: 20,
+  borderRadius: 15,
+  elevation: 5,
+},
+modalTitle: {
+  fontSize: 18,
+  fontWeight: 'bold',
+  marginBottom: 20,
+  textAlign: 'center',
+},
+otpInput: {
+  borderWidth: 1,
+  borderColor: '#ddd',
+  borderRadius: 8,
+  padding: 12,
+  fontSize: 16,
+  marginBottom: 20,
+},
+modalButtons: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  gap: 15,
+  alignItems : 'center'
+},
+modalButton: {
+  flex: 1,
+  padding: 12,
+  borderRadius: 8,
+  alignItems: 'center',
+  justifyContent : 'center',
+},
+modalButtonText : {
+ padding : 20,
+ borderRadius : 10,
+ color : 'white',
+}
 });
 
 const getDistance = (coord1, coord2) => {
@@ -315,6 +425,10 @@ const getDistance = (coord1, coord2) => {
    Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
  return R * c;
+};
+
+const toRad = (value) => {
+ return value * Math.PI / 180;
 };
 
 export default DeliveryMap;
