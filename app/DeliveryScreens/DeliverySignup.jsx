@@ -23,7 +23,7 @@ export default function SignUpScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [mobileNumber, setMobileNumber] = useState('+91');
+  const [mobileNumber, setMobileNumber] = useState('');
   const [otpModalVisible, setOtpModalVisible] = useState(false);
   const [otpInput, setOtpInput] = useState(['', '', '', '', '', '']);
   const otpRefs = useRef([]);
@@ -40,7 +40,9 @@ export default function SignUpScreen() {
       return;
     }
 
-    if (mobileNumber.length !== 13) {
+    // setMobileNumber(`+91${mobileNumber}`);
+
+    if (mobileNumber.length !== 10) {
       Alert.alert('Error', 'Please enter a valid 10-digit mobile number');
       return;
     }
@@ -49,7 +51,7 @@ export default function SignUpScreen() {
       name: name,
       email: email,
       password: password,
-      phonenumber: mobileNumber
+      phonenumber: `+91${mobileNumber}`
     };
 
     try {
@@ -57,7 +59,7 @@ export default function SignUpScreen() {
         name,
         email,
         password,
-        phonenumber: '+91' + phonenumber.replace(/\D/g, ''), // Format phone number with +91
+        phonenumber: `+91${mobileNumber}` // Format phone number with +91
       });
 
       if (response.data && response.data.deliverypersonId) {
@@ -67,16 +69,19 @@ export default function SignUpScreen() {
           [
             {
               text: 'OK',
-              onPress: () => navigation.replace('DeliveryLogin')
+              onPress: async () => {
+               const res = await axios.post("http://192.168.29.165:3500/Adminstore/delivery/generate-otp", {
+                phonenumber : `+91${mobileNumber}`
+               });
+               setOtpModalVisible(true);
             }
+           }
           ]
         );
-      } else {
-        Alert.alert('Error', response.data.message || 'OTP verification failed');
       }
     } catch (error) {
-      console.error('OTP verification error:', error);
-      Alert.alert('Error', 'Failed to verify OTP. Please try again.');
+      console.error(error);
+      // Alert.alert('Error', response.data);
     }
   };
 
@@ -91,8 +96,17 @@ export default function SignUpScreen() {
 
     const isComplete = newOtp.every(digit => digit !== '');
     if (isComplete) {
-      setTimeout(() => {
-        verifyOTP(newOtp);
+      setTimeout( async () => {
+        const response = await axios.post("http://192.168.29.165:3500/Adminstore/delivery/verify-otp",{
+         phonenumber : `+91${mobileNumber}`,
+         otp : newOtp.join('')
+        })
+
+        if (response.status == 200) {
+         Alert.alert('Success', 'OTP verified successfully!');
+         setOtpModalVisible(false);
+         navigation.navigate('DocumentUploader');
+        }
       }, 300);
     }
   };
@@ -166,17 +180,21 @@ export default function SignUpScreen() {
         </View>
 
         <View style={styles.inputContainer}>
-          <Ionicons name="phone-portrait-outline" size={20} color="#666" />
-          <TextInput
-            style={styles.input}
-            placeholder="Mobile Number"
-            placeholderTextColor="#666"
-            value={mobileNumber}
-            onChangeText={setMobileNumber}
-            keyboardType="numeric"
-            maxLength={13}
-          />
-        </View>
+              <Ionicons name="call-outline" size={20} color="#666" />
+
+              {/* Country Code Prefix */}
+              <Text style={styles.countryCode}>+91</Text>
+
+              <TextInput
+                style={[styles.input, { marginLeft: 5 }]}
+                placeholder="Phone Number"
+                placeholderTextColor="#666"
+                value={mobileNumber}
+                onChangeText={setMobileNumber}
+                keyboardType="phone-pad"
+              />
+            </View>
+
 
         <TouchableOpacity 
           style={styles.signupButton}
@@ -356,6 +374,12 @@ const styles = StyleSheet.create({
       },
     }),
   },
+  countryCode: {
+   fontSize: 16,
+   color: "#666",
+   marginHorizontal: 10,
+   includeFontPadding: false,
+ },
   resendButton: {
     padding: 10,
   },

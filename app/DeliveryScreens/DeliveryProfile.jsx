@@ -120,10 +120,6 @@ export default function DeliveryProfile() {
           transition={{ type: 'timing', duration: 1000 }}
           style={styles.header}
         >
-          <View>
-            <Text style={styles.timeText}>18:30 PM</Text>
-            <Text style={styles.dayText}>sunday</Text>
-          </View>
           <View style={styles.headerRight}>
             <Text style={styles.headerTitle}>Profile</Text>
             <TouchableOpacity onPress={() => setIsEditing(!isEditing)}>

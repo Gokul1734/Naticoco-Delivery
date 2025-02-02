@@ -21,6 +21,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { MotiView } from 'moti';
 import MapViewDirections from 'react-native-maps-directions';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const { width, height } = Dimensions.get('window');
 // Replace with your actual API key
 const GOOGLE_MAPS_API_KEY = 'AIzaSyD9YLhonLv3JjCCVjBv06W1el67IXr19bY';
@@ -40,18 +41,25 @@ const DeliveryMap = () => {
     initialRegion 
   } = route.params;
 
+  // console.log(initialRegion);
   // const CustomerLocation = [13.054396166290767, 80.256687144931];
 
-  const [currentLocation, setCurrentLocation] = useState({"latitude": 13.042999295973052, "longitude": 80.24179707342626});
+  const [currentLocation, setCurrentLocation] = useState(initialRegion);
   const [navigationStage, setNavigationStage] = useState('store');
   const [distance, setDistance] = useState(null);
   const [duration, setDuration] = useState(null);
 
 
   useEffect(() => {
-    requestLocationPermission();
-  }, []);
-
+   const fetcher = async() => {
+    const loc = await AsyncStorage.getItem('riderLocation');
+   if(loc){
+    const locArray = JSON.parse(loc);
+    setCurrentLocation(locArray);
+    }
+   };
+   fetcher();
+  },[currentLocation])
 
   const fetchOtp = async () => {
    try {
@@ -67,57 +75,6 @@ const DeliveryMap = () => {
     console.log(e);
    }
 
-  };
-
-  const requestLocationPermission = async () => {
-    if (Platform.OS === 'android') {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
-        );
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          getCurrentLocation();
-        } else {
-          Alert.alert(
-            'Location Permission',
-            'Location permission is required for navigation',
-            [{ text: 'OK' }]
-          );
-        }
-      } catch (err) {
-        console.warn(err);
-      }
-    } else {
-      // For iOS, you'd use a different permission request method
-      getCurrentLocation();
-    }
-  };
-
-  const getCurrentLocation = () => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        setCurrentLocation({
-          latitude,
-          longitude,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        });
-      },
-      (error) => {
-        console.log('Location error:', error);
-        Alert.alert(
-          'Location Error',
-          'Unable to retrieve current location',
-          [{ text: 'OK' }]
-        );
-      },
-      { 
-        enableHighAccuracy: true, 
-        timeout: 20000, 
-        maximumAge: 1000 
-      }
-    );
   };
 
   const checkProximityToStore = () => {
@@ -144,7 +101,7 @@ const DeliveryMap = () => {
       if (navigationStage === 'store') {
         checkProximityToStore();
       } else if (navigationStage === 'customer') {
-        if (getDistance(currentLocation,{"latitude": 13.042999295973052, "longitude": 80.24179707342626}) < 0.1) {
+        if (getDistance(currentLocation,CustomerLocation)) {
          setShowOtpModal(true);
          navigation.navigate('DeliveryHome');
         } else {
@@ -214,6 +171,14 @@ const DeliveryMap = () => {
     );
   };
 
+  // const handleUserOTP = async () => {
+  //  try {
+  //   const response = await axios.get("")
+  //  }
+  // }
+
+  // console.log(initialRegion);
+
   const renderMapContent = () => { 
     if (navigationStage == 'store') {
      return (
@@ -234,7 +199,7 @@ const DeliveryMap = () => {
        />
 
         <MapViewDirections             // Delivery person going to Store
-          origin={initialRegion}
+          origin={currentLocation}
           destination={StoreLocation}
           apikey={GOOGLE_MAPS_API_KEY}
           strokeWidth={6}
@@ -325,7 +290,7 @@ const DeliveryMap = () => {
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.modalButton, styles.verifyButton]}
-                onPress={() => {console.log(`OTP : ${otp}`)}}
+                onPress={() => console.log(otp)}
                 disabled={loading}
               >
                 {loading ? (

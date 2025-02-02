@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import DScreenBackground from './Components/DScreenBackground';
 import DeliveryLoadingScreen from './Components/DeliveryLoadingScreen';
+import * as Location from 'expo-location';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -66,43 +67,121 @@ export default function DeliveryHome() {
   const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [currentLocation, setCurrentLocation] = useState(null);
+  const [address,setAddress] = useState('');
+  const [errorMsg,setErrorMsg] = useState('');
+  // const [deliverypersonId,setDeliveryPersonId] = useState('');
 
   useEffect(() => {
-    loadUserDetails();
-  }, []);
+   loadUserDetails();
+ }, []);
+
+ useEffect(() => {
+  if (userDetails?._id) {
+    fetchOrders();
+  }
+}, [userDetails]);
+
+const loadUserDetails = async () => {
+  try {
+    const details = await AsyncStorage.getItem('riderDetails');
+
+    if (details) {
+      const parsedDetails = JSON.parse(details);
+      // console.log(parsedDetails);
+      setUserDetails(parsedDetails);
+      // setDeliveryPersonId(parsedDetails.deliverypersonId);
+      setIsAvailable(parsedDetails.availability);
+    }
+    setIsLoading(false);
+  } catch (error) {
+    console.error('Error loading user details:', error);
+    setIsLoading(false);
+  }
+};
 
   useEffect(() => {
-    if (userDetails?._id) {
-      fetchOrders();
-    }
-  }, [userDetails]);
+   const initializeData = async () => {
+     try {
+       let { status } = await Location.requestForegroundPermissionsAsync();
+       if (status !== "granted") {
+         setErrorMsg("Permission to access location was denied");
+         setAddress("Location access denied");
+         return;
+       }
 
-  const loadUserDetails = async () => {
-    try {
-      const details = await AsyncStorage.getItem('riderDetails');
-      if (details) {
-        const parsedDetails = JSON.parse(details);
-        setUserDetails(parsedDetails);
-        setIsAvailable(parsedDetails.availability);
-      }
-      setIsLoading(false);
-    } catch (error) {
-      console.error('Error loading user details:', error);
-      setIsLoading(false);
-    }
-  };
+       const location = await Location.getCurrentPositionAsync({});
+       setCurrentLocation({
+        latitude: location.coords.latitude,
+        longitude: location.coords.latitude,
+       });
+       // Save location to AsyncStorage
+       await AsyncStorage.setItem(
+         "riderLocation",
+         JSON.stringify({
+          latitude: 13.051486857261544,
+          longitude: 80.24041309607061,
+         })
+       );
+
+       const del = await AsyncStorage.getItem("riderDetails");
+       const deliverypersonId = JSON.parse(del).deliverypersonId;
+       // console.log(deliverypersonId);
+       
+
+       const res = await axios.post("http://192.168.29.165:3500/Adminstore/delivery/update-location", {
+         deliverypersonId : deliverypersonId,
+         latitude: location.coords.latitude,
+         longitude: location.coords.longitude,
+
+        });
+       
+       if (res.status != 200) {
+        console.log('Error in', deliverypersonId);
+       }
+
+       // Get address from coordinates
+       const addressResponse = await Location.reverseGeocodeAsync({
+         latitude: location.coords.latitude,
+         longitude: location.coords.longitude,
+       });
+
+       if (addressResponse[0]) {
+         const addressObj = addressResponse[0];
+         const formattedAddress = addressObj.district || "";
+         setAddress(formattedAddress);
+       }
+
+     } catch (error) {
+       console.error("Error initializing data:", error);
+       setErrorMsg("Error getting location");
+       setAddress("Location unavailable");
+     } finally {
+       setIsLoading(false);
+     }
+   };
+
+   initializeData();
+
+   const intervalId = setInterval(() => {
+    initializeData();
+    // console.log("Location : ",currentLocation);
+  }, 5000);
+
+  // Clean up the interval when the component is unmounted
+  return () => clearInterval(intervalId);
+ }, []);
+
+
 
   const fetchOrders = async () => {
-    try {
-      const id = userDetails._id;
-      const response = await axios.get(`http://192.168.29.165:3500/Adminstore/delivery/orders/${id}`);
-      if (response.data != undefined) {
+   // console.log(userDetails._id);
+
+      const response = await axios.get(`http://192.168.29.165:3500/Adminstore/delivery/orders/${userDetails._id}`);
+      if (response.data != null) {
         setOrders(response.data);
       }
       // console.log(orders);
-    } catch (error) {
-      console.error('Error fetching orders:', error);
-    }
+
   };
 
   useEffect(() => {
@@ -112,11 +191,14 @@ export default function DeliveryHome() {
     // Set up interval to fetch orders every 5 seconds
     const intervalId = setInterval(() => {
       fetchOrders();
+      // console.log(currentLocation);
     }, 5000);
 
     // Clean up the interval when the component is unmounted
     return () => clearInterval(intervalId);
   },);
+
+      // console.log(orders);
 
   const toggleAvailability = async () => {
     try {
@@ -127,6 +209,7 @@ export default function DeliveryHome() {
       
       if (response.status === 200) {
         setIsAvailable(newAvailability);
+        
         const updatedDetails = { ...userDetails, availability: newAvailability };
         await AsyncStorage.setItem('riderDetails', JSON.stringify(updatedDetails));
         setUserDetails(updatedDetails);
@@ -135,6 +218,8 @@ export default function DeliveryHome() {
       console.error('Error updating availability:', error);
     }
   };
+
+  // console.log(currentLocation);
 
   const handleOrderPress = async (orderId, startDelivery = false) => {
     if (!startDelivery) {
@@ -163,8 +248,8 @@ export default function DeliveryHome() {
           StoreLocation,
           CustomerLocation,
           initialRegion: {
-            latitude: StoreLocation.latitude,
-            longitude: StoreLocation.longitude,
+            latitude: currentLocation.latitude,
+            longitude: currentLocation.longitude,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }

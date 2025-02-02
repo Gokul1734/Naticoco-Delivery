@@ -8,7 +8,8 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
   Alert,
-  StyleSheet
+  StyleSheet,
+  Image
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -46,10 +47,10 @@ const LoginScreen = () => {
         if (!accessToken) {
           throw new Error('No access token received');
         }
-
+        console.log(user);
         // Store token and user details
         await AsyncStorage.setItem('userToken', accessToken);
-        await AsyncStorage.setItem('userDetails', JSON.stringify(user));
+        await AsyncStorage.setItem('riderDetails', JSON.stringify(user));
 
         // Navigate to main screen
         navigation.navigate('DeliveryTab', { user });
@@ -74,6 +75,10 @@ const LoginScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Image style={{
+       width: 100,
+       height: 100,
+      }} src={require("../../assets/Login.png")} resizeMode='contain' />
       <KeyboardAvoidingView behavior="padding" style={styles.formContainer}>
         <Text style={styles.title}>Sign In</Text>
 

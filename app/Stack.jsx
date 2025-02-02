@@ -42,6 +42,7 @@ import LoginScreen from "./DeliveryScreens/DeliveryLogin";
 import SignUp from "./DeliveryScreens/DeliverySignup";
 import Map from "./DeliveryScreens/Location";
 import DeliveryMap from "./DeliveryScreens/DeliveryMap";
+import DocumentUploaderScreen from "./DeliveryScreens/Document";
 // import LoadingScreen from "./CustomerScreens/Components/LoadingScreen";
 // import ScreenBackground from "./CustomerScreens/Components/ScreenBackground";
 
@@ -96,6 +97,11 @@ export default function StackNavigator() {
           name="DeliveryMap"
           component={DeliveryMap}
           options={{ headerShown: false }}
+        />
+        <Stack.Screen 
+          name="DocumentUploader" 
+          component={DocumentUploaderScreen} 
+          options={{ title: 'Document Verification' }}
         />
       </Stack.Navigator>
       

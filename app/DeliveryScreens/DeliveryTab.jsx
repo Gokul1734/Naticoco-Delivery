@@ -54,9 +54,6 @@ export default function DeliveryTab() {
             case 'Search':
               iconName = focused ? 'search' : 'search-outline';
               break;
-            case 'Locations':
-              iconName = focused ? 'location' : 'location-outline';
-              break;
             case 'Savings':
               iconName = focused ? 'wallet' : 'wallet-outline';
               break;
@@ -77,7 +74,6 @@ export default function DeliveryTab() {
     >
       <Tab.Screen name="Home" component={DeliveryHome} />
       <Tab.Screen name="Search" component={DeliverySearch} />
-      <Tab.Screen name="Locations" component={DeliveryLocations} />
       <Tab.Screen name="Savings" component={DeliverySavings} />
       <Tab.Screen name="Profile" component={DeliveryProfile} />
     </Tab.Navigator>

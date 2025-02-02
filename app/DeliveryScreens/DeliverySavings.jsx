@@ -81,10 +81,6 @@ export default function DeliverySavings() {
           transition={{ type: 'timing', duration: 1000 }}
           style={styles.header}
         >
-          <View>
-            <Text style={styles.timeText}>18:30 PM</Text>
-            <Text style={styles.dayText}>sunday</Text>
-          </View>
           <Text style={styles.headerTitle}>Your Savings</Text>
         </MotiView>
 
